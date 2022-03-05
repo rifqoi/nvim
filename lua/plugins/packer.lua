@@ -34,5 +34,13 @@ return require('packer').startup(function()
 	}
 	use 'sbdchd/neoformat'
 	use 'tpope/vim-fugitive'
+	use 'tpope/vim-rhubarb'
+	use {"akinsho/toggleterm.nvim"}
+	use 'tpope/vim-commentary'
+	use 'tpope/vim-surround'
+	use { 'ThePrimeagen/harpoon',
+	    requires= { {'nvim-lua/plenary.nvim'}}
+	}
+	use 'windwp/nvim-autopairs'
 end)
 

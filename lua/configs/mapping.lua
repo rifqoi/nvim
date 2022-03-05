@@ -8,3 +8,22 @@ nnoremap("<leader>x", ":bdel<CR>", "silent")
 nnoremap("<C-n>", ":NvimTreeToggle<CR>", "silent")
 nnoremap("Y", "y$", "silent")
 
+
+-- Yank Clipboard
+nnoremap("<leader>y", "\"+y", "silent")
+vnoremap("<leader>y", "\"+y", "silent")
+
+
+-- Delete from any buffer
+nnoremap("<leader>d", "\"_d", "silent")
+vnoremap("<leader>d", "\"_d", "silent")
+
+-- Paste from system clipboard
+nnoremap("<leader>p", "\"+p", "silent")
+xnoremap("<leader>p", "\"+p", "silent")
+
+-- Move lines
+vnoremap("J", ":m '>+1<CR>gv=gv", "silent")
+vnoremap("K", ":m '<-2<CR>gv=gv", "silent")
+
+

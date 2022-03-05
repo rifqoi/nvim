@@ -30,7 +30,11 @@ cmp.setup({
 		["<C-Space>"] = cmp.mapping.complete(),
 		["<Tab>"] = cmp.mapping.select_next_item(),
 		["<S-Tab>"] = cmp.mapping.select_prev_item(),
-		["<CR>"] = cmp.mapping.confirm({ select = true })
+		['<C-e>'] = cmp.mapping({
+		    i = cmp.mapping.abort(),
+		    c = cmp.mapping.close(),
+		  }),
+		["<CR>"] = cmp.mapping.confirm({ select = false })
 	},
 
 	formatting = {
@@ -155,5 +159,4 @@ for _, lsp in pairs(servers) do
   }
 end
 
-
-require("luasnip.loaders.from_vscode").lazy_load()
+require("luasnip.loaders.from_vscode").load()
