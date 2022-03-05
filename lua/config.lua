@@ -6,3 +6,4 @@ set.completeopt = {'menu','menuone','noselect'}
 vim.g.mapleader = ' '
 
 vim.cmd 'colorscheme gruvbox'
+vim.cmd 'highlight clear SignColumn'

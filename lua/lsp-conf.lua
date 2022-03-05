@@ -68,6 +68,44 @@ tabnine:setup({
 	snippet_placeholder = "..",
 })
 
+-- LSP Config 
+--
+
+local protocol = require'vim.lsp.protocol'
+protocol.CompletionItemKind = {
+'', -- Text
+'', -- Method
+'', -- Function
+'', -- Constructor
+'', -- Field
+'', -- Variable
+'', -- Class
+'ﰮ', -- Interface
+'', -- Module
+'', -- Property
+'', -- Unit
+'', -- Value
+'', -- Enum
+'', -- Keyword
+'﬌', -- Snippet
+'', -- Color
+'', -- File
+'', -- Reference
+'', -- Folder
+'', -- EnumMember
+'', -- Constant
+'', -- Struct
+'', -- Event
+'ﬦ', -- Operator
+'', -- TypeParameter
+}
+
+local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+for type, icon in pairs(signs) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
+
 local opts = { noremap=true, silent=true }
 vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
 vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
@@ -97,10 +135,13 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
 end
 
+-- Set up completion using nvim_cmp with LSP source
+local capabilities = require('cmp_nvim_lsp').update_capabilities(
+  vim.lsp.protocol.make_client_capabilities()
+)
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
 local servers = {'pyright'}
-local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
 for _, lsp in pairs(servers) do
   require('lspconfig')[lsp].setup {
     on_attach = on_attach,
