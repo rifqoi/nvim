@@ -1,5 +1,6 @@
 local set = vim.opt
-set.relativenumber = true
+
+-- set.relativenumber = true
 set.number = true
 set.shiftwidth = 4
 set.completeopt = {'menu','menuone','noselect'}
