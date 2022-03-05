@@ -1,0 +1,7 @@
+require('config')
+require('plugins')
+require('statusline')
+require('lsp-conf')
+require('treesitter')
+require('mapping')
+require('telescope')
