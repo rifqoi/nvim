@@ -6,5 +6,5 @@ nnoremap({"<leader>fb"}, ":Telescope buffers<CR>", "silent")
 nnoremap({"<leader>fh"}, ":Telescope help_tags<CR>", "silent")
 nnoremap("<leader>x", ":bdel<CR>", "silent")
 nnoremap("<C-n>", ":NvimTreeToggle<CR>", "silent")
-
+nnoremap("Y", "y$", "silent")
 

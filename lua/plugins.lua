@@ -33,5 +33,6 @@ return require('packer').startup(function()
 	    config = function() require'nvim-tree'.setup {} end
 	}
 	use 'sbdchd/neoformat'
+	use 'tpope/vim-fugitive'
 end)
 
