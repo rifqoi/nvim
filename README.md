@@ -1,2 +1,4 @@
 # my glued up neovim config
-![image](https://user-images.githubusercontent.com/71868613/156880072-62f34d82-1ed9-4e82-99c8-f8f1e5e153fa.png)
+## Preview
+![Preview](https://user-images.githubusercontent.com/71868613/156921077-cd8df781-eaeb-4512-9ffe-f7ae2e4894a6.png)
+<sub>Neovim with tmux</sub>
