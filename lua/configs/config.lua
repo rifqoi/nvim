@@ -9,6 +9,10 @@ set.completeopt = {'menu','menuone','noselect'}
 set.signcolumn = "yes:1"
 set.hidden = true
 set.mouse = 'a'
+
+-- Set Prettier
+vim.g.neoformat_try_node_exe = 1
+
 vim.g.mapleader = ' '
 
 -- Highlight on yank
