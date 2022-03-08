@@ -62,6 +62,7 @@ cmp.setup({
 		{ name = "luasnip" },
 		-- { name = 'ultisnips' },
 		{ name = "buffer" },
+		{ name = "path" },
 	},
 })
 

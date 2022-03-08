@@ -1,0 +1,5 @@
+vim.cmd('let R_openpdf = 1')
+vim.cmd('let R_external_term = 1')
+vim.cmd("let R_external_term = 'tmux neww'")
+vim.cmd('let R_notmuxconf = 1')
+vim.cmd("autocmd BufWritePre *.Rmd execute 'normal \\kp'")

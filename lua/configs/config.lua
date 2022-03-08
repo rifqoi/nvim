@@ -10,6 +10,9 @@ set.signcolumn = "yes:1"
 set.hidden = true
 set.mouse = 'a'
 
+
+
+
 -- Set Prettier
 vim.g.neoformat_try_node_exe = 1
 
@@ -28,3 +31,5 @@ vim.cmd 'colorscheme gruvbox'
 vim.cmd 'hi Normal guibg=NONE ctermbg=NONE'
 vim.cmd 'highlight clear SignColumn'
 set.termguicolors = true
+
+

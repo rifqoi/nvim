@@ -41,5 +41,6 @@ return require('packer').startup(function()
 	    requires= { {'nvim-lua/plenary.nvim'}}
 	}
 	use 'windwp/nvim-autopairs'
+	use 'jalvesaq/Nvim-R'
 end)
 
