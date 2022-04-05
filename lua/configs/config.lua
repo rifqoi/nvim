@@ -4,13 +4,12 @@ local set = vim.opt
 -- set.relativenumber = true
 set.number = true
 set.relativenumber = true
-set.shiftwidth = 4
+set.shiftwidth = 2
 set.completeopt = {'menu','menuone','noselect'}
 set.signcolumn = "yes:1"
 set.hidden = true
 set.mouse = 'a'
-
-
+set.smartindent = true
 
 
 -- Set Prettier

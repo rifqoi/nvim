@@ -32,6 +32,8 @@ require('lualine').setup {
     theme = bubbles_theme,
     component_separators = '|',
     section_separators = { left = '', right = '' },
+    disabled_filetypes = {'packer', 'NVimTree'},
+
   },
   sections = {
     lualine_a = {

@@ -1,4 +1,3 @@
 require('configs')
-
 require('plugins')
 

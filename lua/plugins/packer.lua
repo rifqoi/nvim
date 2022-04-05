@@ -42,5 +42,8 @@ return require('packer').startup(function()
 	}
 	use 'windwp/nvim-autopairs'
 	use 'jalvesaq/Nvim-R'
+	use {
+	  'ggandor/leap.nvim',
+	}
 end)
 
