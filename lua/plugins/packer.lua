@@ -44,7 +44,6 @@ return require('packer').startup(function()
 	use 'jalvesaq/Nvim-R'
 	use {
 	  'ggandor/leap.nvim',
-	   requires= { {'tpope/repeat.vim'}}
 	}
 end)
 
