@@ -1,4 +1,4 @@
-local mapx = require'mapx'.setup{}
+local mapx = require("mapx").setup({})
 local nnoremap = mapx.nnoremap
 local vnoremap = mapx.vnoremap
 local xnoremap = mapx.xnoremap
@@ -11,4 +11,3 @@ nnoremap("<C-b>", ":lua require('harpoon.ui').nav_file(2)<CR>", "silent")
 nnoremap("<C-l>", ":lua require('harpoon.ui').nav_file(3)<CR>", "silent")
 nnoremap("<C-m>", ":lua require('harpoon.ui').nav_file(4)<CR>", "silent")
 --nnoremap("<leader>c", ":lua require('harpoon.tmux').sendCommand('{down-of}', 'ls -la \\r')<CR>", "silent")
-

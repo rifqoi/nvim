@@ -10,6 +10,7 @@ set.signcolumn = "yes:1"
 set.hidden = true
 set.mouse = 'a'
 set.smartindent = true
+set.background = 'dark'
 
 
 -- Set Prettier
@@ -26,9 +27,6 @@ augroup END
 ]]
 
 -- Colorscheme related
-vim.cmd 'colorscheme gruvbox'
+vim.cmd 'colorscheme onedark'
 vim.cmd 'hi Normal guibg=NONE ctermbg=NONE'
-vim.cmd 'highlight clear SignColumn'
 set.termguicolors = true
-
-

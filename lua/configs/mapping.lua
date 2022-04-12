@@ -3,7 +3,7 @@ local nnoremap = mapx.nnoremap
 local vnoremap = mapx.vnoremap
 local xnoremap = mapx.xnoremap
 
-nnoremap("<leader>x", ":bdel<CR>", "silent")
+nnoremap("<leader>z", ":bdel<CR>", "silent")
 nnoremap("<C-n>", ":NvimTreeToggle<CR>", "silent")
 nnoremap("Y", "y$", "silent")
 
