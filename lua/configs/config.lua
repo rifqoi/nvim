@@ -27,6 +27,11 @@ augroup END
 ]]
 
 -- Colorscheme related
-vim.cmd 'colorscheme onedark'
-vim.cmd 'hi Normal guibg=NONE ctermbg=NONE'
-set.termguicolors = true
+require('onedark').setup {
+    style = 'warmer'
+}
+require('onedark').load()
+
+-- vim.cmd 'colorscheme onedark'
+-- vim.cmd 'hi Normal guibg=NONE ctermbg=NONE gui=NONE'
+-- set.termguicolors = true
