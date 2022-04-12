@@ -1,70 +1,224 @@
--- local colors = {
---     blue   = '#80a0ff',
---     cyan   = '#79dac8',
---     black  = '#080808',
---     gruvgrey = '#4e4e4e',
---     white  = '#c6c6c6',
---     red    = '#ff5189',
---     violet = '#d183e8',
---     grey   = '#303030',
--- }
+local windline = require('windline')
+local helper = require('windline.helpers')
+local sep = helper.separators
+local vim_components = require('windline.components.vim')
+local animation = require('wlanimation')
+local efffects = require('wlanimation.effects')
 
--- local bubbles_theme = {
---   normal = {
---     a = { fg = colors.black, bg = colors.red },
---     b = { fg = colors.white, bg = colors.grey },
---     c = { fg = colors.black, bg = colors.gruvgrey},
---   },
+local b_components = require('windline.components.basic')
+local state = _G.WindLine.state
 
---   insert = { a = { fg = colors.black, bg = colors.blue } },
---   visual = { a = { fg = colors.black, bg = colors.cyan } },
---   replace = { a = { fg = colors.black, bg = colors.red } },
+local lsp_comps = require('windline.components.lsp')
+local git_comps = require('windline.components.git')
+local luffy_text = ""
 
---   inactive = {
---     a = { fg = colors.black, bg = colors.white},
---     b = { fg = colors.white, bg = colors.black },
---     c = { fg = colors.black, bg = colors.gruvgrey },
---   },
--- }
-
--- require('lualine').setup {
---   options = {
---     theme = bubbles_theme,
---     component_separators = '|',
---     section_separators = { left = '', right = '' },
---     disabled_filetypes = {'packer', 'NVimTree'},
-
---   },
---   sections = {
---     lualine_a = {
---       { 'mode', separator = { left = '' }, right_padding = 2 },
---     },
---     lualine_b = { 'filename', 'branch' },
---     lualine_c = { 'fileformat' },
---     lualine_x = {},
---     lualine_y = { 'filetype', 'progress' },
---     lualine_z = {
---       { 'location', separator = { right = '' }, left_padding = 2 },
---     },
---   },
---   inactive_sections = {
---     lualine_a = {
---       { 'filename', separator = { left = '', right = '' }},
---     },
---     lualine_b = {},
---     lualine_c = {},
---     lualine_x = {},
---     lualine_y = {},
---     lualine_z = { 'location' },
---   },
---   tabline = {},
---   extensions = {},
--- }
-
-
-require('lualine').setup {
-  options = {
-    theme = 'onedark'
-    -- ... your lualine config
-  }
+local hl_list = {
+    Black = { 'white', 'NormalBg' },
+    White = { 'black', 'white' },
+    Inactive = { 'InactiveFg', 'InactiveBg' },
+    Active = { 'ActiveFg', 'ActiveBg' },
 }
+local basic = {}
+
+basic.divider = { b_components.divider, '' }
+basic.space = { ' ', '' }
+basic.bg = { ' ', 'StatusLine' }
+basic.file_name_inactive = { b_components.full_file_name, hl_list.Inactive }
+basic.line_col_inactive = { b_components.line_col, hl_list.Inactive }
+basic.progress_inactive = { b_components.progress, hl_list.Inactive }
+
+basic.vi_mode = {
+    hl_colors = {
+        Normal = { 'black', 'red', 'bold' },
+        Insert = { 'black', 'green', 'bold' },
+        Visual = { 'black', 'yellow', 'bold' },
+        Replace = { 'black', 'blue_light', 'bold' },
+        Command = { 'black', 'magenta', 'bold' },
+        NormalBefore = { 'red', 'NormalBg' },
+        InsertBefore = { 'green', 'NormalBg' },
+        VisualBefore = { 'yellow', 'NormalBg' },
+        ReplaceBefore = { 'blue_light', 'NormalBg' },
+        CommandBefore = { 'magenta', 'NormalBg' },
+        NormalAfter = { 'white', 'red' },
+        InsertAfter = { 'white', 'green' },
+        VisualAfter = { 'white', 'yellow' },
+        ReplaceAfter = { 'white', 'blue_light' },
+        CommandAfter = { 'white', 'magenta' },
+    },
+    text = function()
+        return {
+            { sep.left_rounded, state.mode[2] .. 'Before' },
+            { state.mode[1] .. ' ', state.mode[2] },
+        }
+    end,
+}
+
+basic.lsp_diagnos = {
+    width = 90,
+    hl_colors = {
+        red = { 'red', 'black' },
+        yellow = { 'yellow', 'black' },
+        blue = { 'blue', 'black' },
+        sep_before = { 'black', 'NormalBg' },
+    },
+    text = function(bufnr)
+        if lsp_comps.check_lsp(bufnr) then
+            return {
+		-- { sep.left_rounded, 'sep_before'},
+                { lsp_comps.lsp_error({ format = '  %s' }), 'red' },
+                { lsp_comps.lsp_warning({ format = '  %s' }), 'yellow' },
+                { lsp_comps.lsp_hint({ format = '  %s' }), 'blue' },
+            }
+        end
+        return ''
+    end,
+}
+
+
+local icon_comp = b_components.cache_file_icon({ default = '', hl_colors = {'white','black_light'} })
+
+basic.file = {
+    hl_colors = {
+        default = { 'white', 'black_light' },
+    },
+    text = function(bufnr)
+        return {
+            { ' ', 'default' },
+            icon_comp(bufnr),
+            { ' ', 'default' },
+            { b_components.cache_file_name('[No Name]', ''), '' },
+            { b_components.file_modified(' '), '' },
+            { b_components.cache_file_size(), '' },
+        }
+    end,
+}
+basic.right = {
+    hl_colors = {
+        sep_before = { 'black_light', 'white_light' },
+        sep_after = { 'white_light', 'NormalBg' },
+        text = { 'black', 'white_light' },
+    },
+    text = function()
+        return {
+            { b_components.line_col_lua, 'text' },
+            { sep.right_rounded, 'sep_after' },
+        }
+    end,
+}
+basic.git = {
+    width = 90,
+    hl_colors = {
+        green = { 'green', 'black' },
+        red = { 'red', 'black' },
+        blue = { 'blue', 'black' },
+    },
+    text = function(bufnr)
+        if git_comps.is_git(bufnr) then
+            return {
+                { ' ', '' },
+                { git_comps.diff_added({ format = ' %s' }), 'green' },
+                { git_comps.diff_removed({ format = '  %s' }), 'red' },
+                { git_comps.diff_changed({ format = ' 柳%s' }), 'blue' },
+            }
+        end
+        return ''
+    end,
+}
+basic.logo = {
+    hl_colors = {
+        sep_before = { 'blue', 'NormalBg' },
+        default = { 'black', 'blue' },
+    },
+    text = function()
+        return {
+            { sep.left_rounded, 'sep_before' },
+            -- { ' ', 'default' },
+            { luffy_text .. ' ', 'default' },
+        }
+    end,
+}
+
+local default = {
+    filetypes = { 'default' },
+    active = {
+        { ' ', hl_list.Black },
+        basic.logo,
+        basic.file,
+        { vim_components.search_count(), { 'red', 'black_light' } },
+        { sep.right_rounded, { 'black_light', 'black' } },
+        basic.lsp_diagnos,
+        basic.git,
+        basic.divider,
+        { git_comps.git_branch({ icon = '  ' }), { 'green', 'NormalBg' }, 90 },
+	{ ' ' , ''},
+        -- { ' ', { 'NormalBg', 'NormalBg' }  },
+        basic.vi_mode,
+        basic.right,
+        { ' ', hl_list.Black },
+    },
+    inactive = {
+        basic.file_name_inactive,
+        basic.divider,
+        basic.divider,
+        basic.line_col_inactive,
+        { '', { 'white', 'InactiveBg' } },
+        basic.progress_inactive,
+    },
+}
+
+local quickfix = {
+    filetypes = { 'qf', 'Trouble' },
+    active = {
+        { '🚦 Quickfix ', { 'white', 'black' } },
+        { helper.separators.slant_right, { 'black', 'black_light' } },
+        {
+            function()
+                return vim.fn.getqflist({ title = 0 }).title
+            end,
+            { 'cyan', 'black_light' },
+        },
+        { ' Total : %L ', { 'cyan', 'black_light' } },
+        { helper.separators.slant_right, { 'black_light', 'InactiveBg' } },
+        { ' ', { 'InactiveFg', 'InactiveBg' } },
+        basic.divider,
+        { helper.separators.slant_right, { 'InactiveBg', 'black' } },
+        { '🧛 ', { 'white', 'black' } },
+    },
+    always_active = true,
+    show_last_status = true
+}
+
+local explorer = {
+    filetypes = { 'fern', 'NvimTree', 'lir' },
+    active = {
+        { '  ', { 'white', 'black' } },
+        { helper.separators.slant_right, { 'black', 'black_light' } },
+        { b_components.divider, '' },
+        { b_components.file_name(''), { 'white', 'black_light' } },
+    },
+    always_active = true,
+    show_last_status = true
+}
+windline.setup({
+    colors_name = function(colors)
+        -- ADD MORE COLOR HERE ----
+        return colors
+    end,
+    statuslines = {
+        default,
+        quickfix,
+        explorer,
+    },
+})
+--  Need FiraCodeICursiveS12 to get this luffy font
+local luffy = { "􏾾", "􏾿", "􏿀", "􏿁", "􏿂", "􏿃" }
+animation.stop_all()
+animation.basic_animation({
+	timeout = nil,
+	delay = 200,
+	interval = 150,
+	effect = efffects.list_text(luffy),
+	on_tick = function(value)
+		luffy_text = value
+	end,
+})

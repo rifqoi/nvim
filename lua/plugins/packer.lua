@@ -71,4 +71,8 @@ return require("packer").startup(function()
 	use({
 		"navarasu/onedark.nvim",
 	})
+
+	use({
+		"windwp/windline.nvim",
+	})
 end)
