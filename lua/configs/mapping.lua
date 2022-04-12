@@ -36,3 +36,22 @@ nnoremap({"<leader>dg"}, ":Telescope diagnostics<CR>", "silent")
 --nnoremap({"gr"}, ":Telescope lsp_references<CR>", "silent")
 nnoremap({"tr"}, ":Telescope treesitter<CR>", "silent")
 
+
+
+-- Tmux
+local ft = vim.api.nvim_buf_get_option(0, "filetype")
+local file = vim.fn.expand("%")
+
+if ft == "vim" or ft == "lua" then
+	local command = ":so %"
+	-- nnoremap("<leader>cr", string.format(":lua print('%s')<CR>", file) , "silent")
+	nnoremap("<leader>cr", command .. "<CR>" , "silent")
+elseif ft == "python" then
+	local command = ":!tmux select-pane -D && tmux send-keys 'python %s' Enter<CR>"
+	nnoremap("<leader>cr", string.format(command, file), "silent")
+elseif ft == "c" then
+	vim.cmd("silent! write")
+	vim.cmd("sp")
+	local output = vim.fn.expand("%:t:r")
+	local command = "gcc %s -o %s && ./%s; rm %s"
+end
