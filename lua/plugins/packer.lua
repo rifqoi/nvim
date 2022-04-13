@@ -1,9 +1,6 @@
 return require("packer").startup(function()
 	use("wbthomason/packer.nvim")
-	use({
-		"nvim-lualine/lualine.nvim",
-		requires = { "kyazdani42/nvim-web-devicons", opt = true },
-	})
+	use({ "nvim-lualine/lualine.nvim", requires = { "kyazdani42/nvim-web-devicons", opt = true } })
 	use({ "jdhao/better-escape.vim", event = "InsertEnter" })
 	use("neovim/nvim-lspconfig")
 	use("hrsh7th/cmp-nvim-lsp")
@@ -16,14 +13,8 @@ return require("packer").startup(function()
 	use("onsails/lspkind-nvim")
 	use("L3MON4D3/LuaSnip")
 	use("rafamadriz/friendly-snippets")
-	use({
-		"nvim-treesitter/nvim-treesitter",
-		run = ":TSUpdate",
-	})
-	use({
-		"nvim-telescope/telescope.nvim",
-		requires = { { "nvim-lua/plenary.nvim" } },
-	})
+	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
+	use({ "nvim-telescope/telescope.nvim", requires = { { "nvim-lua/plenary.nvim" } } })
 	use("b0o/mapx.nvim")
 	use({
 		"kyazdani42/nvim-tree.lua",
@@ -42,19 +33,12 @@ return require("packer").startup(function()
 	use({ "ThePrimeagen/harpoon", requires = { { "nvim-lua/plenary.nvim" } } })
 	use("windwp/nvim-autopairs")
 	use("jalvesaq/Nvim-R")
-	use({
-		"ggandor/leap.nvim",
-	})
-	-- Lua
+	use({ "ggandor/leap.nvim" })
 	use({
 		"folke/trouble.nvim",
 		requires = "kyazdani42/nvim-web-devicons",
 		config = function()
-			require("trouble").setup({
-				-- your configuration comes here
-				-- or leave it empty to use the default settings
-				-- refer to the configuration section below
-			})
+			require("trouble").setup({})
 		end,
 	})
 	use({
@@ -65,25 +49,13 @@ return require("packer").startup(function()
 			})
 		end,
 	})
+	use({ "lewis6991/gitsigns.nvim" })
+	use({ "navarasu/onedark.nvim" })
+	use({ "windwp/windline.nvim" })
+	use({ "akinsho/bufferline.nvim" })
+	use({ "windwp/nvim-ts-autotag" })
+	use({ "maxmellon/vim-jsx-pretty", requires = { "HerringtonDarkholme/yats.vim", opt = true } })
 	use({
-		"lewis6991/gitsigns.nvim",
-	})
-	use({
-		"navarasu/onedark.nvim",
-	})
-
-	use({
-		"windwp/windline.nvim",
-	})
-
-	use({
-		"akinsho/bufferline.nvim",
-	})
-	use({
-		"windwp/nvim-ts-autotag",
-	})
-	use({
-		"maxmellon/vim-jsx-pretty",
-		requires = { "HerringtonDarkholme/yats.vim", opt = true },
+		"lukas-reineke/indent-blankline.nvim",
 	})
 end)
