@@ -79,4 +79,11 @@ return require("packer").startup(function()
 	use({
 		"akinsho/bufferline.nvim",
 	})
+	use({
+		"windwp/nvim-ts-autotag",
+	})
+	use({
+		"maxmellon/vim-jsx-pretty",
+		requires = { "HerringtonDarkholme/yats.vim", opt = true },
+	})
 end)
