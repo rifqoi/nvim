@@ -1,6 +1,5 @@
 return require("packer").startup(function()
 	use("wbthomason/packer.nvim")
-	use("morhetz/gruvbox")
 	use({
 		"nvim-lualine/lualine.nvim",
 		requires = { "kyazdani42/nvim-web-devicons", opt = true },
@@ -8,6 +7,7 @@ return require("packer").startup(function()
 	use({ "jdhao/better-escape.vim", event = "InsertEnter" })
 	use("neovim/nvim-lspconfig")
 	use("hrsh7th/cmp-nvim-lsp")
+	use({ "saadparwaiz1/cmp_luasnip" })
 	use("hrsh7th/cmp-buffer")
 	use("hrsh7th/cmp-path")
 	use("hrsh7th/cmp-cmdline")
