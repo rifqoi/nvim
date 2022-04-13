@@ -267,3 +267,6 @@ animation.basic_animation({
 		luffy_text = value
 	end,
 })
+
+vim.opt.termguicolors = true
+require('bufferline').setup({})

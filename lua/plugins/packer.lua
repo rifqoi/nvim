@@ -75,4 +75,8 @@ return require("packer").startup(function()
 	use({
 		"windwp/windline.nvim",
 	})
+
+	use({
+		"akinsho/bufferline.nvim",
+	})
 end)
