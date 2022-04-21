@@ -11,6 +11,7 @@ set.hidden = true
 set.mouse = "a"
 set.smartindent = true
 set.background = "dark"
+set.scrolloff = 8
 
 -- Set Prettier
 vim.g.neoformat_try_node_exe = 1

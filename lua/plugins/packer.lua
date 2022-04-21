@@ -59,4 +59,5 @@ return require("packer").startup(function()
 	use({ "hrsh7th/cmp-nvim-lsp-signature-help" })
 	use({ "andweeb/presence.nvim" })
 	use("jose-elias-alvarez/null-ls.nvim")
+	use 'JoosepAlviste/nvim-ts-context-commentstring'
 end)
