@@ -42,6 +42,15 @@ if vim.fn.executable("lua-format") == 1 then
 	})
 end
 
+-- Go
+if vim.fn.executable("gofmt") == 1 then
+	load = true
+	sources[#sources + 1] = formatting.gofmt.with({
+		to_stdin = true,
+	})
+end
+
+
 -- C, C++, CS, Java
 if vim.fn.executable("clang-format") == 1 then
 	load = true
