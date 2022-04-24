@@ -60,4 +60,6 @@ return require("packer").startup(function()
 	use({ "andweeb/presence.nvim" })
 	use("jose-elias-alvarez/null-ls.nvim")
 	use 'JoosepAlviste/nvim-ts-context-commentstring'
+	use {'ray-x/navigator.lua', requires = {'ray-x/guihua.lua', run = 'cd lua/fzy && make'}}
+
 end)

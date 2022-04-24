@@ -71,6 +71,7 @@ end
 if vim.fn.executable("prettier") == 1 then
 	load = true
 	sources[#sources + 1] = formatting.prettier.with({
+		filetypes = { "tmpl", "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "css", "scss", "less", "html", "json", "jsonc", "yaml", "markdown", "graphql", "handlebars", },
 		command = "prettier",
 		args = { "--stdin-filepath", "$FILENAME" },
 	})
