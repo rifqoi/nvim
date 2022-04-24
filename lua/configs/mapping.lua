@@ -37,6 +37,8 @@ nnoremap({"<leader>dg"}, ":Telescope diagnostics<CR>", "silent")
 nnoremap({"tr"}, ":Telescope treesitter<CR>", "silent")
 
 
+-- Remove highlight
+nnoremap({"<leader>hl"}, ":nohl<CR>", "silent")
 
 -- Tmux
 local ft = vim.api.nvim_buf_get_option(0, "filetype")
