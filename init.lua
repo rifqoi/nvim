@@ -1,2 +1,6 @@
+-- Gak sabar gue
+require 'impatient'
+
 require("configs")
-require("plugins")
+require("packer_nvim")
+-- require("plugins")

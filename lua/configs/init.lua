@@ -1,3 +1,3 @@
 require('configs.config')
 require('configs.mapping')
-require('configs.code_runner')
+-- require('configs.code_runner')
