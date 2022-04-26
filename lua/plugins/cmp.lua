@@ -12,7 +12,9 @@ local source_mapping = {
 }
 local has_words_before = function()
 	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-	return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+	return col ~= 0 and
+					       vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col)
+									       :match("%s") == nil
 end
 
 local luasnip = require("luasnip")
@@ -36,11 +38,8 @@ cmp.setup({
 		["<C-Space>"] = cmp.mapping.complete(),
 		-- ["<Tab>"] = cmp.mapping.select_next_item(),
 		-- ["<S-Tab>"] = cmp.mapping.select_prev_item(),
-		["<C-e>"] = cmp.mapping({
-			i = cmp.mapping.abort(),
-			c = cmp.mapping.close(),
-		}),
-		["<CR>"] = cmp.mapping.confirm({ select = false }),
+		["<C-e>"] = cmp.mapping({i = cmp.mapping.abort(), c = cmp.mapping.close()}),
+		["<CR>"] = cmp.mapping.confirm({select = false}),
 		["<Tab>"] = cmp.mapping(function(fallback)
 			if cmp.visible() then
 				cmp.select_next_item()
@@ -51,7 +50,7 @@ cmp.setup({
 			else
 				fallback()
 			end
-		end, { "i", "s" }),
+		end, {"i", "s"}),
 
 		["<S-Tab>"] = cmp.mapping(function(fallback)
 			if cmp.visible() then
@@ -61,7 +60,7 @@ cmp.setup({
 			else
 				fallback()
 			end
-		end, { "i", "s" }),
+		end, {"i", "s"}),
 	},
 
 	formatting = {
@@ -81,14 +80,14 @@ cmp.setup({
 
 	sources = {
 		-- tabnine completion? yayaya
-		{ name = "nvim_lsp" },
+		{name = "nvim_lsp"},
 		-- { name = "cmp_tabnine" },
 		-- { name = 'vsnip' },
-		{ name = "luasnip" },
+		{name = "luasnip"},
 		-- { name = 'ultisnips' },
-		{ name = "buffer" },
-		{ name = "path" },
-		{ name = "nvim_lsp_signature_help" },
+		{name = "buffer"},
+		{name = "path"},
+		-- {name = "nvim_lsp_signature_help"},
 	},
 })
 

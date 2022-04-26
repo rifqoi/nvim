@@ -4,13 +4,10 @@
 --   Github:    github.com/jose-elias-alvarez/null-ls.nvim
 -- ───────────────────────────────────────────────── --
 -- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --
-
 -- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --
 -- ━━━━━━━━━━━━━━━━━━━❰ configs ❱━━━━━━━━━━━━━━━━━━━ --
 -- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --
-
 -- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md
-
 local builtins = require("null-ls.builtins")
 local formatting = builtins.formatting
 -- local completion = builtins.completion
@@ -45,11 +42,8 @@ end
 -- Go
 if vim.fn.executable("gofmt") == 1 then
 	load = true
-	sources[#sources + 1] = formatting.gofmt.with({
-		to_stdin = true,
-	})
+	sources[#sources + 1] = formatting.gofmt.with({to_stdin = true})
 end
-
 
 -- C, C++, CS, Java
 if vim.fn.executable("clang-format") == 1 then
@@ -71,9 +65,25 @@ end
 if vim.fn.executable("prettier") == 1 then
 	load = true
 	sources[#sources + 1] = formatting.prettier.with({
-		filetypes = { "tmpl", "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "css", "scss", "less", "html", "json", "jsonc", "yaml", "markdown", "graphql", "handlebars", },
+		filetypes = {
+			"tmpl",
+			"javascript",
+			"javascriptreact",
+			"typescript",
+			"typescriptreact",
+			"vue",
+			"css",
+			"scss",
+			"less",
+			"json",
+			"jsonc",
+			"yaml",
+			"markdown",
+			"graphql",
+			"handlebars",
+		},
 		command = "prettier",
-		args = { "--stdin-filepath", "$FILENAME" },
+		args = {"--stdin-filepath", "$FILENAME"},
 	})
 end
 
@@ -82,7 +92,7 @@ if vim.fn.executable("black") == 1 then
 	load = true
 	sources[#sources + 1] = formatting.black.with({
 		command = "black",
-		args = { "--quiet", "--fast", "-" },
+		args = {"--quiet", "--fast", "-"},
 	})
 end
 
@@ -91,7 +101,7 @@ if vim.fn.executable("djlint") == 1 then
 	load = true
 	sources[#sources + 1] = formatting.djlint.with({
 		command = "djlint",
-		args = { "--reformat", "-" },
+		args = {"--reformat", "-"},
 	})
 end
 
@@ -147,7 +157,23 @@ end
 if load then
 	require("null-ls").setup({
 		sources = sources,
+		on_attach = function(client)
+			if client.resolved_capabilities.document_formatting then
+				vim.cmd([[
+            augroup LspFormatting
+                autocmd! * <buffer>
+                autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+            augroup END
+            ]])
+			end
+
+		end,
 	})
+end
+
+if vim.bo.filetype == "html" then
+	package.loaded['null-ls'] = nil
+	_G['null-ls'] = nil
 end
 
 -- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --
@@ -159,7 +185,8 @@ end
 -- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --
 
 local keymap = vim.api.nvim_set_keymap
-keymap("n", "<Space>fm", "<ESC>:lua vim.lsp.buf.formatting()<CR>", { noremap = true, silent = true })
+keymap("n", "<Space>fm", "<ESC>:lua vim.lsp.buf.formatting()<CR>",
+       {noremap = true, silent = true})
 
 -- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --
 -- ━━━━━━━━━━━━━━━━━❰ end Mappings ❱━━━━━━━━━━━━━━━━ --

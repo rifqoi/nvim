@@ -42,7 +42,8 @@ return packer.startup {
 		use "hrsh7th/cmp-buffer"
 		use "hrsh7th/cmp-path"
 		use "hrsh7th/cmp-cmdline"
-		use {"hrsh7th/cmp-nvim-lsp-signature-help"}
+		-- use {"hrsh7th/cmp-nvim-lsp-signature-help"}
+		use 'ray-x/lsp_signature.nvim'
 		use "L3MON4D3/LuaSnip"
 		use "rafamadriz/friendly-snippets"
 		use "onsails/lspkind-nvim"

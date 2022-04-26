@@ -5,8 +5,8 @@ local set = vim.opt
 set.number = true
 set.relativenumber = true
 set.shiftwidth = 4
-set.tabstop=4
-set.completeopt = { "menu", "menuone", "noselect" }
+set.tabstop = 4
+set.completeopt = {"menu", "menuone", "noselect"}
 set.signcolumn = "yes:1"
 set.hidden = true
 set.mouse = "a"
@@ -28,11 +28,10 @@ augroup END
 ]])
 
 -- Colorscheme related
-require("onedark").setup({
-	style = "warmer",
-})
+require("onedark").setup({style = "warmer"})
 require("onedark").load()
 
+vim.cmd [[ autocmd BufNewFile,BufRead *.tmpl setf html ]]
 -- vim.api.nvim_exec(
 -- [[
 -- augroup fmt

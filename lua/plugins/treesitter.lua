@@ -1,9 +1,7 @@
 require("nvim-treesitter.configs").setup({
 	-- One of "all", "maintained" (parsers with maintainers), or a list of languages
 	-- Install languages synchronously (only applied to `ensure_installed`)
-	context_commentstring = {
-	  enable = true,
-	},
+	context_commentstring = {enable = true},
 	highlight = {
 		-- `false` will disable the whole extension
 		enable = true,
