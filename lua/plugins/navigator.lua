@@ -13,7 +13,9 @@ require'navigator'.setup({
 	on_attach = function(client, bufnr)
 		client.resolved_capabilities.document_formatting = false
 		client.resolved_capabilities.document_range_formatting = false
+		require"lsp_signature".on_attach()
 	end,
+	keymaps = {{key = "<C-p>", func = "signature_help()"}},
 	lsp_signature_help = true,
 	icons = {
 		code_action_icon = '', -- "",
@@ -35,11 +37,18 @@ require'navigator'.setup({
 	lsp = {
 		format_on_save = false,
 		disable_format_cap = lsp_formatter,
-		disable_lsp = {'pylsd', 'sqlls', 'angularls', 'denols'},
+		disable_lsp = {
+			'pylsd',
+			'sqlls',
+			'angularls',
+			'denols',
+			'pylsp',
+			'jedi_language_server',
+		},
 		html = {
 			on_attach = function(client, bufnr) formatting_callback(client, bufnr) end,
 		},
-
+		gopls = {settings = {gopls = {usePlaceholders = false}}},
 	},
 })
 

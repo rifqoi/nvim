@@ -23,12 +23,12 @@ return packer.startup {
 		use {"jdhao/better-escape.vim", event = "InsertEnter"}
 
 		-- Lsp related
-		use("neovim/nvim-lspconfig")
-		use {
-			'ray-x/navigator.lua',
-			requires = {'ray-x/guihua.lua', run = 'cd lua/fzy && make'},
-			config = [[ require("plugins.navigator")]],
-		}
+		use {"neovim/nvim-lspconfig", config = [[ require('plugins.lspconfig') ]]}
+		-- use {
+		-- 	'ray-x/navigator.lua',
+		-- 	requires = {'ray-x/guihua.lua', run = 'cd lua/fzy && make'},
+		-- 	config = [[ require("plugins.navigator")]],
+		-- }
 		use {
 			"folke/trouble.nvim",
 			requires = "kyazdani42/nvim-web-devicons",
@@ -126,7 +126,7 @@ return packer.startup {
 		use {"akinsho/bufferline.nvim"}
 
 		-- For the flex
-		use {"andweeb/presence.nvim", config = [[require("plugins.presence")]]}
+		-- use {"andweeb/presence.nvim", config = [[require("plugins.presence")]]}
 
 		-- Formatter
 		use {
