@@ -69,7 +69,7 @@ return packer.startup {
 		use {
 			"nvim-telescope/telescope.nvim",
 			requires = {{"nvim-lua/plenary.nvim"}},
-			config = [[ require("plugins.treesitter")]],
+			config = [[ require("plugins.telescope")]],
 		}
 
 		-- Key mappings
@@ -120,6 +120,7 @@ return packer.startup {
 
 		-- Best colorscheme
 		use "navarasu/onedark.nvim"
+		use "projekt0n/github-nvim-theme"
 
 		-- Buffer and status line
 		use {"windwp/windline.nvim", config = [[ require('plugins.statusline') ]]}
