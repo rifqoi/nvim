@@ -62,7 +62,7 @@ local on_attach = function(client, bufnr)
 	                            "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
 	vim.api.nvim_buf_set_keymap(bufnr, "n", "gi",
 	                            "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "<C-i>",
+	vim.api.nvim_buf_set_keymap(bufnr, "n", "<C-p>",
 	                            "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
 	vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>wa",
 	                            "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>",

@@ -57,6 +57,12 @@ return packer.startup {
 		}
 		use 'JoosepAlviste/nvim-ts-context-commentstring'
 
+		use {
+			'ray-x/go.nvim',
+			requires = {'ray-x/guihua.lua'},
+			config = [[ require("plugins.go-nvim") ]],
+		}
+
 		-- Treesitter
 		use {
 			"nvim-treesitter/nvim-treesitter",
@@ -121,6 +127,7 @@ return packer.startup {
 		-- Best colorscheme
 		use "navarasu/onedark.nvim"
 		use "projekt0n/github-nvim-theme"
+		use "rebelot/kanagawa.nvim"
 
 		-- Buffer and status line
 		use {"windwp/windline.nvim", config = [[ require('plugins.statusline') ]]}
@@ -136,5 +143,9 @@ return packer.startup {
 		}
 
 		use 'lewis6991/impatient.nvim'
+		-- use {
+		-- 	"smjonas/inc-rename.nvim",
+		-- 	config = function() require("inc_rename").setup() end,
+		-- }
 	end,
 }
