@@ -8,5 +8,7 @@ vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
 	pattern = {"*.go"},
 	callback = function()
 		nnoremap("<leader>gi", ":execute 'GoIfErr' | -3 | delete<CR>", "silent")
+		nnoremap("<leader>gat", ":execute 'write' | GoAddTag<CR>", "silent")
+		nnoremap("<leader>gta", ":execute 'GoRmTag' <CR>", "silent")
 	end,
 })
