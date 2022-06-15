@@ -29,6 +29,32 @@ protocol.CompletionItemKind = {
 	"", -- TypeParameter
 }
 
+-- Window Border
+vim.cmd [[autocmd! ColorScheme * highlight NormalFloat guibg=#1f2335]]
+vim.cmd [[autocmd! ColorScheme * highlight FloatBorder guifg=white guibg=#1f2335]]
+
+-- Do not forget to use the on_attach function
+local function border(hl_name)
+	return {
+		{"╭", hl_name},
+		{"─", hl_name},
+		{"╮", hl_name},
+		{"│", hl_name},
+		{"╯", hl_name},
+		{"─", hl_name},
+		{"╰", hl_name},
+		{"│", hl_name},
+	}
+end
+
+-- LSP settings (for overriding per client)
+local handlers = {
+	["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover,
+	                                      {border = "rounded"}),
+	["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help,
+	                                              {border = "rounded"}),
+}
+
 local signs = {Error = " ", Warn = " ", Hint = " ", Info = " "}
 for type, icon in pairs(signs) do
 	local hl = "DiagnosticSign" .. type
@@ -100,7 +126,6 @@ local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp
 -- vim.cmd("autocmd BufNewFile,BufRead *.cshtml set syntax=html")
 
 local servers = {
-	"pylsp",
 	"sumneko_lua",
 	"gopls",
 	"tsserver",
@@ -108,6 +133,7 @@ local servers = {
 	"tailwindcss",
 	"dockerls",
 	"sqls",
+	"terraform_lsp",
 }
 for _, lsp in pairs(servers) do
 	require("lspconfig")[lsp].setup({
@@ -117,8 +143,23 @@ for _, lsp in pairs(servers) do
 			-- This will be the default in neovim 0.7+
 			debounce_text_changes = 150,
 		},
+		handlers = handlers,
 	})
 end
+
+require("lspconfig").pylsp.setup {
+	on_attach = on_attach,
+	capabilities = capabilities,
+	flags = {
+		-- This will be the default in neovim 0.7+
+		debounce_text_changes = 150,
+	},
+	settings = {
+		-- configure plugins in pylsp
+		pylsp = {plugins = {pycodestyle = {enabled = false}}},
+	},
+	handlers = handlers,
+}
 
 local cmp_capabilities = require("cmp_nvim_lsp").update_capabilities(
 				                         capabilities)
@@ -147,3 +188,10 @@ require("lspconfig").clangd.setup {
 		semanticHighlighting = true,
 	},
 }
+
+local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+	opts = opts or {}
+	opts.border = opts.border or border
+	return orig_util_open_floating_preview(contents, syntax, opts, ...)
+end

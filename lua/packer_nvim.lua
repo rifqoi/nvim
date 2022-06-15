@@ -70,6 +70,7 @@ return packer.startup {
 			config = [[ require("plugins.treesitter")]],
 		}
 		use 'nvim-treesitter/nvim-treesitter-refactor'
+		use 'nvim-treesitter/nvim-treesitter-context'
 
 		-- Telescope
 		use {
@@ -148,5 +149,6 @@ return packer.startup {
 		-- 	config = function() require("inc_rename").setup() end,
 		-- }
 		use 'dhruvasagar/vim-zoom'
+		use "hashivim/vim-terraform"
 	end,
 }

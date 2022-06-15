@@ -104,18 +104,18 @@ end
 -- end
 
 -- Python
--- if vim.fn.executable("black") == 1 then
--- 	load = true
--- 	sources[#sources + 1] = formatting.black.with({
--- 		command = "black",
--- 		args = {"--quiet", "--fast", "-"},
--- 	})
--- end
-
-if vim.fn.executable("yapf") == 1 then
+if vim.fn.executable("black") == 1 then
 	load = true
-	sources[#sources + 1] = formatting.yapf
+	sources[#sources + 1] = formatting.black.with({
+		command = "black",
+		args = {"--quiet", "--fast", "-"},
+	})
 end
+
+-- if vim.fn.executable("yapf") == 1 then
+-- 	load = true
+-- 	sources[#sources + 1] = formatting.yapf
+-- end
 
 -- Django ("htmldjango")
 if vim.fn.executable("djlint") == 1 then
@@ -176,18 +176,17 @@ end
 -- ───────────────────────────────────────────────── --
 
 local lsp_formatting = function(bufnr)
-    vim.lsp.buf.format({
-        filter = function(client)
-            -- apply whatever logic you want (in this example, we'll only use null-ls)
-            return client.name == "null-ls"
-        end,
-        bufnr = bufnr,
-    })
+	vim.lsp.buf.format({
+		filter = function(client)
+			-- apply whatever logic you want (in this example, we'll only use null-ls)
+			return client.name == "null-ls"
+		end,
+		bufnr = bufnr,
+	})
 end
 
 -- if you want to set up formatting on save, you can use this as a callback
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
-
 
 -- add to your shared on_attach callback
 local on_attach = function(client, bufnr)
@@ -217,7 +216,7 @@ end
 -- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --
 
 local keymap = vim.api.nvim_set_keymap
-keymap("n", "<Space>fm", "<ESC>:lua vim.lsp.buf.formatting()<CR>",
+keymap("n", "<Space>fm", "<ESC>:lua vim.lsp.buf.format{async=true}<CR>",
        {noremap = true, silent = true})
 
 -- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --
