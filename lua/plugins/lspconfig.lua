@@ -50,9 +50,9 @@ end
 -- LSP settings (for overriding per client)
 local handlers = {
 	["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover,
-	                                      {border = "rounded"}),
+	                                      {border = border "FloatBorder"}),
 	["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help,
-	                                              {border = "rounded"}),
+	                                              {border = border "FloatBorder"}),
 }
 
 local signs = {Error = " ", Warn = " ", Hint = " ", Info = " "}
@@ -63,7 +63,8 @@ end
 
 local opts = {noremap = true, silent = true}
 vim.api.nvim_set_keymap("n", "<space>e",
-                        "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
+                        "<cmd>lua vim.diagnostic.open_float({border = 'rounded'})<CR>",
+                        opts)
 vim.api.nvim_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>",
                         opts)
 vim.api.nvim_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>",
@@ -188,10 +189,3 @@ require("lspconfig").clangd.setup {
 		semanticHighlighting = true,
 	},
 }
-
-local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
-function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-	opts = opts or {}
-	opts.border = opts.border or border
-	return orig_util_open_floating_preview(contents, syntax, opts, ...)
-end

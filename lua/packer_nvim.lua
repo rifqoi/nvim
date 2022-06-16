@@ -5,12 +5,12 @@ local ok, packer = pcall(require, "packer")
 if not ok then return end
 
 -- automatically run :PackerCompile whenever plugins.lua is updated
-vim.cmd([[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost packer_nvim.lua source <afile> | PackerCompile
-  augroup end
-]])
+-- vim.cmd([[
+--   augroup packer_user_config
+--     autocmd!
+--     autocmd BufWritePost packer_nvim.lua source <afile> | PackerCompile
+--   augroup end
+-- ]])
 
 -- vim.cmd [[packadd packer.nvim]]
 execute('packadd packer.nvim')
