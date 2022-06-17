@@ -80,6 +80,8 @@ basic.lsp_diagnos = {
 		if lsp_comps.check_lsp(bufnr) then
 			return {
 				-- { sep.left_rounded, 'sep_before'},
+				-- it use a hightlight group IncSearch
+
 				{lsp_comps.lsp_error({format = "  %s"}), "red"},
 				{lsp_comps.lsp_warning({format = "  %s"}), "yellow"},
 				{lsp_comps.lsp_hint({format = "  %s"}), "blue"},
@@ -88,6 +90,8 @@ basic.lsp_diagnos = {
 		return ""
 	end,
 }
+
+basic.lsp_name = {}
 
 local icon_comp = b_components.cache_file_icon({
 	default = "",
@@ -190,7 +194,7 @@ local default = {
 		{" ", ""},
 		basic.vi_mode,
 		basic.right,
-		{" ", hl_list.Black},
+		{" ", hl_list.Active},
 	},
 	inactive = {
 		basic.file_name_inactive,
