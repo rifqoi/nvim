@@ -88,7 +88,7 @@ vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
 		elseif ft == "rmd" then
 			local r_console = ":silent !tmux neww -n rconsole -k -t 2 -d R<CR>"
 			local render_rmarkdown = string.format(
-							                         ":silent !tmux send-keys -t rconsole.0  \"rmarkdown::render('%s')\" Enter",
+							                         ":silent !tmux send-keys -t rconsole.0  \"rmarkdown::render('%s')\" Enter && ~/.config/nvim/scripts/cleanup_rmd.sh<CR>",
 							                         file)
 			vim.keymap.set("n", "<leader>rs", r_console, {silent = true})
 			vim.keymap.set("n", "<leader>rr", render_rmarkdown, {silent = true})
