@@ -41,21 +41,57 @@ vim.keymap.set("n", "tr", ":Telescope treesitter<CR>", {silent = true})
 -- Remove highlight
 vim.keymap.set("n", "<leader>hl", ":nohl<CR>", {silent = true})
 
--- Tmux
-local ft = vim.api.nvim_buf_get_option(0, "filetype")
-local file = vim.fn.expand("%")
+-- Undotree
+vim.keymap.set("n", "<leader>ut", ":UndotreeToggle<CR>", {silent = true})
 
-if ft == "vim" or ft == "lua" then
-	local command = ":so %"
-	-- vim.keymap.set("n","<leader>cr", string.format(":lua print('%s')<CR>", file) , {silent=true})
-	vim.keymap.set("n", "<leader>cr", command .. "<CR>", {silent = true})
-elseif ft == "python" then
-	local command = ":!tmux select-pane -D && tmux send-keys 'python %s' Enter<CR>"
-	vim.keymap
-					.set("n", "<leader>cr", string.format(command, file), {silent = true})
-elseif ft == "c" then
-	vim.cmd("silent! write")
-	vim.cmd("sp")
-	local output = vim.fn.expand("%:t:r")
-	local command = "gcc %s -o %s && ./%s; rm %s"
-end
+-- Window resize
+vim.keymap.set("n", "<leader>=", "<cmd>resize +7<CR>", {silent = true})
+vim.keymap.set("n", "<leader>-", "<cmd>resize -7<CR>", {silent = true})
+vim.keymap.set("n", "\\=", "<cmd>vertical resize +7<CR>", {silent = true})
+vim.keymap.set("n", "\\-", "<cmd>vertical resize -7<CR>", {silent = true})
+
+-- Tmux
+
+vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
+	callback = function()
+		local ft = vim.api.nvim_buf_get_option(0, "filetype")
+		local file = vim.fn.expand("%")
+		if ft == "vim" or ft == "lua" then
+			local command = ":so %"
+			-- vim.keymap.set("n","<leader>cr", string.format(":lua print('%s')<CR>", file) , {silent=true})
+			vim.keymap.set("n", "<leader>rr", command .. "<CR>", {silent = true})
+		elseif ft == "python" then
+			local run = string.format("python '%s'", file)
+			local command = string.format(
+							                ":silent !tmux select-pane -D && tmux send-keys \"%s\"  Enter && tmux select-pane -U<CR>",
+							                run)
+			local command3 = string.format(
+							                 ":silent !tmux neww bash -c \"%s 2>/dev/null | less +F\"<CR> ",
+							                 run)
+
+			vim.keymap.set("n", "<leader>rr", string.format(command3), {silent = true})
+			vim.keymap.set("n", "<leader>rd", string.format(command, file),
+			               {silent = true})
+
+		elseif ft == "go" then
+			local run = string.format("go run \"%s\"", file)
+			local command_bash = string.format(
+							                     ":silent !tmux neww bash -c \"%s | less \"<CR>", run)
+			local command =
+							":silent !tmux select-pane -D && tmux send-keys '%s' Enter && tmux select-pane -U<CR>"
+
+			vim.keymap.set("n", "<leader>rr", string.format(command_bash),
+			               {silent = true})
+			vim.keymap.set("n", "<leader>rd", string.format(command, run),
+			               {silent = true})
+
+		elseif ft == "rmd" then
+			local r_console = ":silent !tmux neww -n rconsole -k -t 2 -d R<CR>"
+			local render_rmarkdown = string.format(
+							                         ":silent !tmux send-keys -t rconsole.0  \"rmarkdown::render('%s')\" Enter",
+							                         file)
+			vim.keymap.set("n", "<leader>rs", r_console, {silent = true})
+			vim.keymap.set("n", "<leader>rr", render_rmarkdown, {silent = true})
+		end
+	end,
+})

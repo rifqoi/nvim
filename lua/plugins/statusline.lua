@@ -28,7 +28,7 @@ local get_filetype = function(bufnr)
 end
 
 local hl_list = {
-	Black = {"white", "ActiveBg"},
+	Black = {"white", "black_light"},
 	White = {"black", "white"},
 	Inactive = {"InactiveFg", "InactiveBg"},
 	Active = {"ActiveFg", "ActiveBg"},
@@ -194,7 +194,7 @@ local default = {
 		{" ", ""},
 		basic.vi_mode,
 		basic.right,
-		{" ", hl_list.Active},
+		{" ", hl_list.Black},
 	},
 	inactive = {
 		basic.file_name_inactive,

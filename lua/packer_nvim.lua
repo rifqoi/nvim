@@ -5,12 +5,12 @@ local ok, packer = pcall(require, "packer")
 if not ok then return end
 
 -- automatically run :PackerCompile whenever plugins.lua is updated
--- vim.cmd([[
---   augroup packer_user_config
---     autocmd!
---     autocmd BufWritePost packer_nvim.lua source <afile> | PackerCompile
---   augroup end
--- ]])
+vim.cmd([[
+  augroup packer_user_config
+    autocmd!
+    autocmd BufWritePost packer_nvim.lua source <afile> | PackerCompile
+  augroup end
+]])
 
 -- vim.cmd [[packadd packer.nvim]]
 execute('packadd packer.nvim')
@@ -42,7 +42,7 @@ return packer.startup {
 		use "hrsh7th/cmp-buffer"
 		use "hrsh7th/cmp-path"
 		use "hrsh7th/cmp-cmdline"
-		-- use {"hrsh7th/cmp-nvim-lsp-signature-help"}
+		use {"hrsh7th/cmp-nvim-lsp-signature-help"}
 		use 'ray-x/lsp_signature.nvim'
 		use "L3MON4D3/LuaSnip"
 		use "rafamadriz/friendly-snippets"
@@ -114,7 +114,7 @@ return packer.startup {
 		}
 
 		-- For r development
-		use {"jalvesaq/Nvim-R", config = [[ require("plugins.nvim-r")]]}
+		-- use {"jalvesaq/Nvim-R", config = [[ require("plugins.nvim-r")]]}
 
 		-- Jumpy boi
 		use {"ggandor/leap.nvim", config = [[ require("plugins.leap")]]}
@@ -150,5 +150,6 @@ return packer.startup {
 		-- }
 		use 'dhruvasagar/vim-zoom'
 		use "hashivim/vim-terraform"
+		use("mbbill/undotree")
 	end,
 }
