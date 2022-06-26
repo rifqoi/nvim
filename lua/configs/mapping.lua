@@ -76,7 +76,7 @@ vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
 		elseif ft == "go" then
 			local run = string.format("go run \"%s\"", file)
 			local command_bash = string.format(
-							                     ":silent !tmux neww bash -c \"%s | less \"<CR>", run)
+							                     ":silent !tmux neww bash -c \"%s | less\"<CR>", run)
 			local command =
 							":silent !tmux select-pane -D && tmux send-keys '%s' Enter && tmux select-pane -U<CR>"
 

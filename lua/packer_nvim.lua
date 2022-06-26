@@ -129,6 +129,8 @@ return packer.startup {
 		use "navarasu/onedark.nvim"
 		use "projekt0n/github-nvim-theme"
 		use "rebelot/kanagawa.nvim"
+		use "gruvbox-community/gruvbox"
+		use "folke/tokyonight.nvim"
 
 		-- Buffer and status line
 		use {"windwp/windline.nvim", config = [[ require('plugins.statusline') ]]}

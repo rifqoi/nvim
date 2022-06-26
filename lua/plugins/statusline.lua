@@ -28,7 +28,7 @@ local get_filetype = function(bufnr)
 end
 
 local hl_list = {
-	Black = {"white", "black_light"},
+	Black = {"black", "black"},
 	White = {"black", "white"},
 	Inactive = {"InactiveFg", "InactiveBg"},
 	Active = {"ActiveFg", "ActiveBg"},
@@ -95,11 +95,11 @@ basic.lsp_name = {}
 
 local icon_comp = b_components.cache_file_icon({
 	default = "",
-	hl_colors = {"white", "black_light"},
+	hl_colors = {"black", "red"},
 })
 
 basic.file = {
-	hl_colors = {default = {"white", "black_light"}},
+	hl_colors = {default = {"black", "red"}},
 	text = function(bufnr)
 		return {
 			{" ", "default"},
@@ -114,7 +114,7 @@ basic.file = {
 basic.right = {
 	hl_colors = {
 		sep_before = {"black_light", "white_light"},
-		sep_after = {"white_light", "NormalBg"},
+		sep_after = {"white_light", "black"},
 		text = {"black", "white_light"},
 	},
 	text = function()
@@ -141,7 +141,7 @@ basic.git = {
 	end,
 }
 basic.logo = {
-	hl_colors = {sep_before = {"blue", "NormalBg"}, default = {"black", "blue"}},
+	hl_colors = {sep_before = {"blue", "black"}, default = {"black", "blue"}},
 	text = function()
 		return {
 			{sep.left_rounded, "sep_before"},
@@ -182,8 +182,8 @@ local default = {
 		{" ", hl_list.Black},
 		basic.logo,
 		basic.file,
-		{vim_components.search_count(), {"red", "black_light"}},
-		{sep.right_rounded, {"black_light", "black"}},
+		{vim_components.search_count(), {"black", "red"}},
+		{sep.right_rounded, {"red", "black"}},
 		basic.lsp_diagnos,
 		basic.git,
 		basic.divider,
