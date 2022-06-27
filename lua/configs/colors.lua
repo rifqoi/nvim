@@ -15,10 +15,10 @@
 -- 	colors = {carpYellow = "#F0C674"},
 -- 	overrides = {},
 -- })
---
---
---
 -- vim.cmd("colorscheme kanagawa")
+--
+--
+--
 -- Onedark
 -- require("onedark").setup({
 -- 	style = "dark",
@@ -41,6 +41,11 @@
 -- })
 -- require("onedark").load()
 -- vim.cmd('colorscheme onedark')
+--
+--
+--
+-- github theme
+--
 -- require("github-theme").setup({
 -- 	theme_style = "dark",
 -- 	-- other config
@@ -57,16 +62,13 @@
 --
 -- Tokyo Night
 -- Example config in Lua
-vim.g.tokyonight_style = "night"
-vim.g.tokyonight_italic_functions = true
-vim.g.tokyonight_sidebars = {"qf", "vista_kind", "terminal", "packer"}
-
--- Change the "hint" color to the "orange" color, and make the "error" color bright red
-vim.g.tokyonight_colors = {hint = "orange", error = "#ff0000"}
-
--- Load the colorscheme
-vim.cmd [[colorscheme tokyonight]]
-
+-- vim.g.tokyonight_style = "night"
+-- vim.g.tokyonight_italic_functions = true
+-- vim.g.tokyonight_sidebars = {"qf", "vista_kind", "terminal", "packer"}
+-- -- Change the "hint" color to the "orange" color, and make the "error" color bright red
+-- vim.g.tokyonight_colors = {hint = "orange", error = "#ff0000"}
+-- -- Load the colorscheme
+-- vim.cmd [[colorscheme tokyonight]]
 -- FloatBorder
 vim.cmd([[highlight FloatBorder guibg=None ctermbg=None]])
 vim.cmd('hi NormalFloat guibg=None guifg=None')
