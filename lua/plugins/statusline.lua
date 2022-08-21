@@ -179,7 +179,7 @@ basic.filetype = {
 local default = {
 	filetypes = {"default"},
 	active = {
-		{" ", hl_list.Black},
+		{" ", " "},
 		basic.logo,
 		basic.file,
 		{vim_components.search_count(), {"black", "red"}},

@@ -131,6 +131,7 @@ return packer.startup {
 		use "rebelot/kanagawa.nvim"
 		use "gruvbox-community/gruvbox"
 		use "folke/tokyonight.nvim"
+		use "rose-pine/neovim"
 		use {"norcalli/nvim-base16.lua", requires = {{"norcalli/nvim.lua"}}}
 
 		-- Buffer and status line
