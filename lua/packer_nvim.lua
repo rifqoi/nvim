@@ -18,142 +18,162 @@ local use = packer.use
 
 return packer.startup {
 	function()
-		use "wbthomason/packer.nvim"
+		use("wbthomason/packer.nvim")
 
-		use {"jdhao/better-escape.vim", event = "InsertEnter"}
+		use({"jdhao/better-escape.vim", event = "InsertEnter"})
 
 		-- Lsp related
-		use {"neovim/nvim-lspconfig", config = [[ require('plugins.lspconfig') ]]}
-		-- use {
+		-- Always import nvim-lsp-installer first before lspconfig
+		use({
+			"williamboman/nvim-lsp-installer",
+			config = function() require('plugins.lspinstall') end,
+		})
+		use({
+			"neovim/nvim-lspconfig",
+			config = function() require('plugins.lspconfig') end,
+		})
+		-- use ( {
 		-- 	'ray-x/navigator.lua',
 		-- 	requires = {'ray-x/guihua.lua', run = 'cd lua/fzy && make'},
-		-- 	config = [[ require("plugins.navigator")]],
-		-- }
-		use {
+		-- 	config = function() require("plugins.navigator") end,
+		-- } )
+		use({
 			"folke/trouble.nvim",
 			requires = "kyazdani42/nvim-web-devicons",
-			config = [[ require("plugins.trouble")]],
-		}
+			config = function() require("plugins.trouble") end,
+		})
 
 		-- CMP completion
-		use {"hrsh7th/nvim-cmp", config = [[ require("plugins.cmp") ]]}
-		use {"hrsh7th/cmp-nvim-lsp"}
-		use {"saadparwaiz1/cmp_luasnip"}
-		use "hrsh7th/cmp-buffer"
-		use "hrsh7th/cmp-path"
-		use "hrsh7th/cmp-cmdline"
-		use {"hrsh7th/cmp-nvim-lsp-signature-help"}
-		use 'ray-x/lsp_signature.nvim'
-		use "L3MON4D3/LuaSnip"
-		use "rafamadriz/friendly-snippets"
-		use "onsails/lspkind-nvim"
+		use({"hrsh7th/nvim-cmp", config = function() require("plugins.cmp") end})
+		use({"hrsh7th/cmp-nvim-lsp"})
+		use({"saadparwaiz1/cmp_luasnip"})
+		use("hrsh7th/cmp-buffer")
+		use("hrsh7th/cmp-path")
+		use("hrsh7th/cmp-cmdline")
+		use({"hrsh7th/cmp-nvim-lsp-signature-help"})
+		use('ray-x/lsp_signature.nvim')
+		use("L3MON4D3/LuaSnip")
+		use("rafamadriz/friendly-snippets")
+		use("onsails/lspkind-nvim")
 
 		-- Autopairs
-		use {"windwp/nvim-autopairs", config = [[ require("plugins.autopairs")]]}
-		use {"windwp/nvim-ts-autotag", config = [[ require("plugins.autotag")]]}
-		use {
+		use({
+			"windwp/nvim-autopairs",
+			config = function() require("plugins.autopairs") end,
+		})
+		use({
+			"windwp/nvim-ts-autotag",
+			config = function() require("plugins.autotag") end,
+		})
+		use({
 			"maxmellon/vim-jsx-pretty",
 			requires = {"HerringtonDarkholme/yats.vim", opt = true},
-		}
-		use 'JoosepAlviste/nvim-ts-context-commentstring'
+		})
+		use('JoosepAlviste/nvim-ts-context-commentstring')
 
-		use {
+		use({
 			'ray-x/go.nvim',
 			requires = {'ray-x/guihua.lua'},
-			config = [[ require("plugins.go-nvim") ]],
-		}
+			config = function() require("plugins.go-nvim") end,
+		})
 
 		-- Treesitter
-		use {
+		use({
 			"nvim-treesitter/nvim-treesitter",
 			run = ":TSUpdate",
-			config = [[ require("plugins.treesitter")]],
-		}
-		use 'nvim-treesitter/nvim-treesitter-refactor'
-		use 'nvim-treesitter/nvim-treesitter-context'
+			config = function() require("plugins.treesitter") end,
+		})
+		use('nvim-treesitter/nvim-treesitter-refactor')
+		use('nvim-treesitter/nvim-treesitter-context')
 
 		-- Telescope
-		use {
+		use({
 			"nvim-telescope/telescope.nvim",
 			requires = {{"nvim-lua/plenary.nvim"}},
-			config = [[ require("plugins.telescope")]],
-		}
+			config = function() require("plugins.telescope") end,
+		})
 
 		-- Key mappings
-		use "b0o/mapx.nvim"
+		use("b0o/mapx.nvim")
 
 		-- File tree Nvimtree
-		use {
+		use({
 			"kyazdani42/nvim-tree.lua",
 			requires = {
 				"kyazdani42/nvim-web-devicons", -- optional, for file icon
 			},
 			config = function() require("nvim-tree").setup({}) end,
-		}
+		})
 
 		-- Tpope Plugins
 		use("tpope/vim-fugitive")
-		use {
+		use({
 			"lewis6991/gitsigns.nvim",
-			config = [[ require("plugins.gitsigns-nvim")]],
-		}
+			config = function() require("plugins.gitsigns-nvim") end,
+		})
 		use("tpope/vim-rhubarb")
 		use("tpope/vim-commentary")
 		use("tpope/vim-surround")
 
-		use {
+		use({
 			"lukas-reineke/indent-blankline.nvim",
-			config = [[ require("plugins.indent-blankline")]],
-		}
+			config = function() require("plugins.indent-blankline") end,
+		})
 
 		-- DA HARPOON
-		use {
+		use({
 			"ThePrimeagen/harpoon",
 			requires = {{"nvim-lua/plenary.nvim"}},
-			config = [[ require("plugins.harpoon")]],
-		}
+			config = function() require("plugins.harpoon") end,
+		})
 
 		-- For r development
-		-- use {"jalvesaq/Nvim-R", config = [[ require("plugins.nvim-r")]]}
+		-- use ( {"jalvesaq/Nvim-R", config = function() require("plugins.nvim-r") end} )
 
 		-- Jumpy boi
-		use {"ggandor/leap.nvim", config = [[ require("plugins.leap")]]}
+		use({"ggandor/leap.nvim", config = function() require("plugins.leap") end})
 
 		-- Seamless tmux integration
-		use {
+		use({
 			"alexghergh/nvim-tmux-navigation",
-			config = [[ require("plugins.nvim-tmux")]],
-		}
+			config = function() require("plugins.nvim-tmux") end,
+		})
 
 		-- Best colorscheme
-		use "navarasu/onedark.nvim"
-		use "projekt0n/github-nvim-theme"
-		use "rebelot/kanagawa.nvim"
-		use "gruvbox-community/gruvbox"
-		use "folke/tokyonight.nvim"
-		use "rose-pine/neovim"
-		use {"norcalli/nvim-base16.lua", requires = {{"norcalli/nvim.lua"}}}
+		use("navarasu/onedark.nvim")
+		use("projekt0n/github-nvim-theme")
+		use("rebelot/kanagawa.nvim")
+		use("gruvbox-community/gruvbox")
+		use("folke/tokyonight.nvim")
+		use("rose-pine/neovim")
+		use({"norcalli/nvim-base16.lua", requires = {{"norcalli/nvim.lua"}}})
 
 		-- Buffer and status line
-		use {"windwp/windline.nvim", config = [[ require('plugins.statusline') ]]}
-		use {"akinsho/bufferline.nvim"}
+		use({
+			"windwp/windline.nvim",
+			config = function() require('plugins.statusline') end,
+		})
+		use({"akinsho/bufferline.nvim"})
 
 		-- For the flex
-		-- use {"andweeb/presence.nvim", config = [[require("plugins.presence")]]}
+		use({
+			"andweeb/presence.nvim",
+			config = function() require("plugins.presence") end,
+		})
 
 		-- Formatter
-		use {
+		use({
 			"jose-elias-alvarez/null-ls.nvim",
-			config = [[ require("plugins.null-ls")]],
-		}
+			config = function() require("plugins.null-ls") end,
+		})
 
 		use 'lewis6991/impatient.nvim'
-		-- use {
+		-- use ( {
 		-- 	"smjonas/inc-rename.nvim",
 		-- 	config = function() require("inc_rename").setup() end,
-		-- }
-		use 'dhruvasagar/vim-zoom'
-		use "hashivim/vim-terraform"
+		-- } )
+		use('dhruvasagar/vim-zoom')
+		use("hashivim/vim-terraform")
 		use("mbbill/undotree")
 	end,
 }
