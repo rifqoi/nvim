@@ -32,6 +32,7 @@ return packer.startup {
 			"neovim/nvim-lspconfig",
 			config = function() require('plugins.lspconfig') end,
 		})
+		use({"SmiteshP/nvim-navic", requires = "neovim/nvim-lspconfig"})
 		-- use ( {
 		-- 	'ray-x/navigator.lua',
 		-- 	requires = {'ray-x/guihua.lua', run = 'cd lua/fzy && make'},
@@ -85,6 +86,7 @@ return packer.startup {
 		})
 		use('nvim-treesitter/nvim-treesitter-refactor')
 		use('nvim-treesitter/nvim-treesitter-context')
+		use('p00f/nvim-ts-rainbow')
 
 		-- Telescope
 		use({
@@ -175,5 +177,7 @@ return packer.startup {
 		use('dhruvasagar/vim-zoom')
 		use("hashivim/vim-terraform")
 		use("mbbill/undotree")
+		use({'scalameta/nvim-metals', requires = {"nvim-lua/plenary.nvim"}})
+
 	end,
 }

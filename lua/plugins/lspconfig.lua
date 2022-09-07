@@ -1,5 +1,6 @@
 -- LSP Config
 --
+local navic = require("nvim-navic")
 local protocol = require("vim.lsp.protocol")
 protocol.CompletionItemKind = {
 	"", -- Text
@@ -114,7 +115,43 @@ local on_attach = function(client, bufnr)
 	--                             "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 	client.server_capabilities.document_formatting = false
 	client.server_capabilities.document_range_formatting = false
+	navic.attach(client, bufnr)
 end
+
+navic.setup {
+	icons = {
+		File = " ",
+		Module = " ",
+		Namespace = " ",
+		Package = " ",
+		Class = " ",
+		Method = " ",
+		Property = " ",
+		Field = " ",
+		Constructor = " ",
+		Enum = "練",
+		Interface = "練",
+		Function = " ",
+		Variable = " ",
+		Constant = " ",
+		String = " ",
+		Number = " ",
+		Boolean = "◩ ",
+		Array = " ",
+		Object = " ",
+		Key = " ",
+		Null = "ﳠ ",
+		EnumMember = " ",
+		Struct = " ",
+		Event = " ",
+		Operator = " ",
+		TypeParameter = " ",
+	},
+	highlight = false,
+	separator = " > ",
+	depth_limit = 0,
+	depth_limit_indicator = "..",
+}
 
 local runtime_path = vim.split(package.path, ";")
 table.insert(runtime_path, "lua/?.lua")
@@ -135,6 +172,7 @@ local servers = {
 	"dockerls",
 	"sqls",
 	"terraform_lsp",
+	-- "metals",
 }
 for _, lsp in pairs(servers) do
 	require("lspconfig")[lsp].setup({
@@ -162,12 +200,39 @@ require("lspconfig").pylsp.setup {
 	handlers = handlers,
 }
 
-local cmp_capabilities = require("cmp_nvim_lsp").update_capabilities(
-				                         capabilities)
+local metals_config = require("metals").bare_config()
 
-local clangd_capabilities = cmp_capabilities
-clangd_capabilities.textDocument.semanticHighlighting = true
-clangd_capabilities.offsetEncoding = "utf-8"
+-- Example of settings
+metals_config.settings = {
+	showImplicitArguments = true,
+	excludedPackages = {
+		"akka.actor.typed.javadsl",
+		"com.github.swagger.akka.javadsl",
+	},
+}
+
+metals_config.on_attach = function(client, bufnr) on_attach(client, bufnr) end
+metals_config.capabilities = capabilities
+metals_config.init_options.statusBarProvider = "on"
+
+local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals",
+                                                      {clear = true})
+vim.api.nvim_create_autocmd("FileType", {
+	-- NOTE: You may or may not want java included here. You will need it if you
+	-- want basic Java support but it may also conflict if you are using
+	-- something like nvim-jdtls which also works on a java filetype autocmd.
+	pattern = {"scala", "sbt", "java"},
+	callback = function()
+		require("metals").initialize_or_attach(metals_config)
+		vim.keymap.set("n", "<leader>mc",
+		               "<cmd>lua require'telescope'.extensions.metals.commands()<CR>",
+		               {silent = true, noremap = true})
+	end,
+	group = nvim_metals_group,
+})
+
+-- clangd_capabilities.textDocument.semanticHighlighting = true
+-- clangd_capabilities.offsetEncoding = "utf-8"
 
 -- require("lspconfig").clangd.setup {
 -- 	capabilities = clangd_capabilities,

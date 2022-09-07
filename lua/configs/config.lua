@@ -17,6 +17,8 @@ set.scrolloff = 8
 set.termguicolors = true
 set.cursorline = true
 set.undodir = os.getenv("HOME") .. ".vim/undodir"
+set.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
+vim.opt_global.shortmess:remove("F"):append("c")
 
 vim.g.mapleader = " "
 
