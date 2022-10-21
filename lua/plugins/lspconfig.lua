@@ -1,6 +1,5 @@
 -- LSP Config
 --
-local navic = require("nvim-navic")
 local protocol = require("vim.lsp.protocol")
 protocol.CompletionItemKind = {
 	"", -- Text
@@ -115,50 +114,14 @@ local on_attach = function(client, bufnr)
 	--                             "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 	client.server_capabilities.document_formatting = false
 	client.server_capabilities.document_range_formatting = false
-	navic.attach(client, bufnr)
 end
-
-navic.setup {
-	icons = {
-		File = " ",
-		Module = " ",
-		Namespace = " ",
-		Package = " ",
-		Class = " ",
-		Method = " ",
-		Property = " ",
-		Field = " ",
-		Constructor = " ",
-		Enum = "練",
-		Interface = "練",
-		Function = " ",
-		Variable = " ",
-		Constant = " ",
-		String = " ",
-		Number = " ",
-		Boolean = "◩ ",
-		Array = " ",
-		Object = " ",
-		Key = " ",
-		Null = "ﳠ ",
-		EnumMember = " ",
-		Struct = " ",
-		Event = " ",
-		Operator = " ",
-		TypeParameter = " ",
-	},
-	highlight = false,
-	separator = " > ",
-	depth_limit = 0,
-	depth_limit_indicator = "..",
-}
 
 local runtime_path = vim.split(package.path, ";")
 table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
-local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp
-				                                                                 .protocol
-				                                                                 .make_client_capabilities())
+local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp
+				                                                                  .protocol
+				                                                                  .make_client_capabilities())
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
 -- vim.cmd("autocmd BufNewFile,BufRead *.cshtml set syntax=html")
@@ -172,6 +135,7 @@ local servers = {
 	"dockerls",
 	"sqls",
 	"terraform_lsp",
+	"bashls",
 	-- "metals",
 }
 for _, lsp in pairs(servers) do
@@ -198,6 +162,18 @@ require("lspconfig").pylsp.setup {
 		pylsp = {plugins = {pycodestyle = {enabled = false}}},
 	},
 	handlers = handlers,
+}
+
+require("lspconfig").yamlls.setup {
+	on_attach = on_attach,
+	settings = {
+		yaml = {
+			schemas = {
+				["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json"] = "/*.yaml",
+
+			},
+		},
+	},
 }
 
 local metals_config = require("metals").bare_config()

@@ -12,7 +12,6 @@ vim.cmd([[
   augroup end
 ]])
 
--- vim.cmd [[packadd packer.nvim]]
 execute('packadd packer.nvim')
 local use = packer.use
 
@@ -22,22 +21,16 @@ return packer.startup {
 
 		use({"jdhao/better-escape.vim", event = "InsertEnter"})
 
-		-- Lsp related
-		-- Always import nvim-lsp-installer first before lspconfig
 		use({
-			"williamboman/nvim-lsp-installer",
+			"williamboman/mason.nvim",
 			config = function() require('plugins.lspinstall') end,
 		})
+
 		use({
 			"neovim/nvim-lspconfig",
 			config = function() require('plugins.lspconfig') end,
 		})
-		use({"SmiteshP/nvim-navic", requires = "neovim/nvim-lspconfig"})
-		-- use ( {
-		-- 	'ray-x/navigator.lua',
-		-- 	requires = {'ray-x/guihua.lua', run = 'cd lua/fzy && make'},
-		-- 	config = function() require("plugins.navigator") end,
-		-- } )
+
 		use({
 			"folke/trouble.nvim",
 			requires = "kyazdani42/nvim-web-devicons",
@@ -170,10 +163,6 @@ return packer.startup {
 		})
 
 		use 'lewis6991/impatient.nvim'
-		-- use ( {
-		-- 	"smjonas/inc-rename.nvim",
-		-- 	config = function() require("inc_rename").setup() end,
-		-- } )
 		use('dhruvasagar/vim-zoom')
 		use("hashivim/vim-terraform")
 		use("mbbill/undotree")
