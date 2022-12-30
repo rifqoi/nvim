@@ -136,10 +136,15 @@ local servers = {
 	"sqls",
 	"terraform_lsp",
 	"bashls",
-	-- "metals",
+	"pyright",
+	"jedi_language_server",
+	"golangci_lint_ls",
 }
+
+local lspconfig_status, lspconfig = pcall(require, "lspconfig")
+if not lspconfig_status then return end
 for _, lsp in pairs(servers) do
-	require("lspconfig")[lsp].setup({
+	lspconfig[lsp].setup({
 		on_attach = on_attach,
 		capabilities = capabilities,
 		flags = {
@@ -150,21 +155,21 @@ for _, lsp in pairs(servers) do
 	})
 end
 
-require("lspconfig").pylsp.setup {
-	on_attach = on_attach,
-	capabilities = capabilities,
-	flags = {
-		-- This will be the default in neovim 0.7+
-		debounce_text_changes = 150,
-	},
-	settings = {
-		-- configure plugins in pylsp
-		pylsp = {plugins = {pycodestyle = {enabled = false}}},
-	},
-	handlers = handlers,
-}
+-- lspconfig.pylsp.setup {
+-- 	on_attach = on_attach,
+-- 	capabilities = capabilities,
+-- 	flags = {
+-- 		-- This will be the default in neovim 0.7+
+-- 		debounce_text_changes = 150,
+-- 	},
+-- 	settings = {
+-- 		-- configure plugins in pylsp
+-- 		pylsp = {plugins = {pycodestyle = {enabled = false}}},
+-- 	},
+-- 	handlers = handlers,
+-- }
 
-require("lspconfig").yamlls.setup {
+lspconfig.yamlls.setup {
 	on_attach = on_attach,
 	settings = {
 		yaml = {
@@ -176,41 +181,29 @@ require("lspconfig").yamlls.setup {
 	},
 }
 
-local metals_config = require("metals").bare_config()
-
--- Example of settings
-metals_config.settings = {
-	showImplicitArguments = true,
-	excludedPackages = {
-		"akka.actor.typed.javadsl",
-		"com.github.swagger.akka.javadsl",
-	},
-}
-
-metals_config.on_attach = function(client, bufnr) on_attach(client, bufnr) end
-metals_config.capabilities = capabilities
-metals_config.init_options.statusBarProvider = "on"
-
-local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals",
-                                                      {clear = true})
-vim.api.nvim_create_autocmd("FileType", {
-	-- NOTE: You may or may not want java included here. You will need it if you
-	-- want basic Java support but it may also conflict if you are using
-	-- something like nvim-jdtls which also works on a java filetype autocmd.
-	pattern = {"scala", "sbt", "java"},
+vim.api.nvim_create_autocmd("BufWritePre", {
+	pattern = {"*.go"},
 	callback = function()
-		require("metals").initialize_or_attach(metals_config)
-		vim.keymap.set("n", "<leader>mc",
-		               "<cmd>lua require'telescope'.extensions.metals.commands()<CR>",
-		               {silent = true, noremap = true})
+		local params = vim.lsp.util.make_range_params(nil, "utf-16")
+		params.context = {only = {"source.organizeImports"}}
+		local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params,
+		                                        3000)
+		for _, res in pairs(result or {}) do
+			for _, r in pairs(res.result or {}) do
+				if r.edit then
+					vim.lsp.util.apply_workspace_edit(r.edit, "utf-16")
+				else
+					vim.lsp.buf.execute_command(r.command)
+				end
+			end
+		end
 	end,
-	group = nvim_metals_group,
 })
 
 -- clangd_capabilities.textDocument.semanticHighlighting = true
 -- clangd_capabilities.offsetEncoding = "utf-8"
 
--- require("lspconfig").clangd.setup {
+-- lspconfig.clangd.setup {
 -- 	capabilities = clangd_capabilities,
 -- 	on_attach = on_attach,
 -- 	cmd = {

@@ -11,8 +11,8 @@
 local builtins = require("null-ls.builtins")
 local formatting = builtins.formatting
 -- local completion = builtins.completion
--- local diagnostics = builtins.diagnostics
--- local code_actions = builtins.code_actions
+local diagnostics = builtins.diagnostics
+local code_actions = builtins.code_actions
 
 -- register any number of sources simultaneously
 local sources = {}
@@ -72,36 +72,10 @@ if vim.fn.executable("clang-format") == 1 then
 	})
 end
 
--- "javascript", "javascriptreact", "typescript", "typescriptreact", "vue",
--- "css", "scss", "less", "html", "json", "yaml", "markdown", "graphql"
 if vim.fn.executable("prettierd") == 1 then
 	load = true
 	sources[#sources + 1] = formatting.prettierd
 end
--- if vim.fn.executable("prettier") == 1 then
--- 	load = true
--- 	sources[#sources + 1] = formatting.prettier.with({
--- 		filetypes = {
--- 			"tmpl",
--- 			"javascript",
--- 			"javascriptreact",
--- 			"typescript",
--- 			"typescriptreact",
--- 			"vue",
--- 			"css",
--- 			"scss",
--- 			"less",
--- 			"json",
--- 			"jsonc",
--- 			"yaml",
--- 			"markdown",
--- 			"graphql",
--- 			"handlebars",
--- 		},
--- 		command = "prettier",
--- 		args = {"--stdin-filepath", "$FILENAME"},
--- 	})
--- end
 
 -- Python
 if vim.fn.executable("black") == 1 then
@@ -116,15 +90,6 @@ end
 -- 	load = true
 -- 	sources[#sources + 1] = formatting.yapf
 -- end
-
--- Django ("htmldjango")
-if vim.fn.executable("djlint") == 1 then
-	load = true
-	sources[#sources + 1] = formatting.djlint.with({
-		command = "djlint",
-		args = {"--reformat", "-"},
-	})
-end
 
 -- ───────────────❰ end FORMATTING ❱──────────────── --
 -- ───────────────────────────────────────────────── --

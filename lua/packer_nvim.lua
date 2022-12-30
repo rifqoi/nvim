@@ -22,13 +22,27 @@ return packer.startup {
 		use({"jdhao/better-escape.vim", event = "InsertEnter"})
 
 		use({
-			"williamboman/mason.nvim",
-			config = function() require('plugins.lspinstall') end,
+			"neovim/nvim-lspconfig",
+			config = function() require('plugins.lspconfig') end,
 		})
 
 		use({
-			"neovim/nvim-lspconfig",
-			config = function() require('plugins.lspconfig') end,
+			"williamboman/mason.nvim",
+			config = function() require('plugins.mason') end,
+		})
+
+		use({"williamboman/mason-lspconfig.nvim"})
+
+		-- Formatter
+		use({
+			"jose-elias-alvarez/null-ls.nvim",
+			config = function() require("plugins.null-ls") end,
+		})
+		use({"jayp0521/mason-null-ls.nvim"})
+
+		use({
+			'j-hui/fidget.nvim',
+			config = function() require("fidget").setup {window = {blend = 0}} end,
 		})
 
 		use({
@@ -112,7 +126,7 @@ return packer.startup {
 
 		use({
 			"lukas-reineke/indent-blankline.nvim",
-			config = function() require("plugins.indent-blankline") end,
+			-- config = function() require("plugins.indent-blankline") end,
 		})
 
 		-- DA HARPOON
@@ -122,12 +136,6 @@ return packer.startup {
 			config = function() require("plugins.harpoon") end,
 		})
 
-		-- For r development
-		-- use ( {"jalvesaq/Nvim-R", config = function() require("plugins.nvim-r") end} )
-
-		-- Jumpy boi
-		use({"ggandor/leap.nvim", config = function() require("plugins.leap") end})
-
 		-- Seamless tmux integration
 		use({
 			"alexghergh/nvim-tmux-navigation",
@@ -135,20 +143,27 @@ return packer.startup {
 		})
 
 		-- Best colorscheme
-		use("navarasu/onedark.nvim")
-		use("projekt0n/github-nvim-theme")
-		use("rebelot/kanagawa.nvim")
-		use("gruvbox-community/gruvbox")
-		use("folke/tokyonight.nvim")
-		use("rose-pine/neovim")
-		use({"norcalli/nvim-base16.lua", requires = {{"norcalli/nvim.lua"}}})
+		use {"catppuccin/nvim", as = "catppuccin"}
+		use("danilamihailov/beacon.nvim")
 
 		-- Buffer and status line
+		-- use({
+		-- 	"windwp/windline.nvim",
+		-- 	config = function() require('plugins.statusline') end,
+		-- })
 		use({
-			"windwp/windline.nvim",
-			config = function() require('plugins.statusline') end,
+			'feline-nvim/feline.nvim',
+			config = function() require("plugins.feline") end,
 		})
-		use({"akinsho/bufferline.nvim"})
+		use({
+			"akinsho/bufferline.nvim",
+			after = "catppuccin",
+			config = function()
+				require("bufferline").setup {
+					highlights = require("catppuccin.groups.integrations.bufferline").get(),
+				}
+			end,
+		})
 
 		-- For the flex
 		use({
@@ -156,17 +171,9 @@ return packer.startup {
 			config = function() require("plugins.presence") end,
 		})
 
-		-- Formatter
-		use({
-			"jose-elias-alvarez/null-ls.nvim",
-			config = function() require("plugins.null-ls") end,
-		})
-
 		use 'lewis6991/impatient.nvim'
 		use('dhruvasagar/vim-zoom')
 		use("hashivim/vim-terraform")
 		use("mbbill/undotree")
-		use({'scalameta/nvim-metals', requires = {"nvim-lua/plenary.nvim"}})
-
 	end,
 }

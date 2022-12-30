@@ -17,6 +17,7 @@ set.scrolloff = 8
 set.termguicolors = true
 set.cursorline = true
 set.undodir = os.getenv("HOME") .. ".vim/undodir"
+set.laststatus = 3
 -- vim.opt_global.shortmess:remove("F"):append("c")
 
 vim.g.mapleader = " "
