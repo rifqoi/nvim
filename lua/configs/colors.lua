@@ -5,8 +5,8 @@ require("catppuccin").setup({
 		dark = "mocha",
 	},
 	compile_path = vim.fn.stdpath("cache") .. "/catppuccin",
-	-- transparent_background = true,
-	-- term_colors = false,
+	transparent_background = true,
+	term_colors = false,
 	dim_inactive = {enabled = false, shade = "dark", percentage = 0.15},
 	styles = {
 		comments = {"italic"},
@@ -59,8 +59,8 @@ vim.cmd([[highlight FloatBorder guibg=None ctermbg=None]])
 vim.cmd('hi NormalFloat guibg=None guifg=None')
 
 -- Background
--- vim.cmd('hi Normal guibg=None')
--- vim.cmd('hi EndOfBuffer guibg=None')
+vim.cmd('hi Normal guibg=None')
+vim.cmd('hi EndOfBuffer guibg=None')
 
 -- Cursor Number
 vim.cmd('hi CursorLine guibg=None')

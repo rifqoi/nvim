@@ -136,7 +136,6 @@ local servers = {
 	"sqls",
 	"terraform_lsp",
 	"bashls",
-	"pyright",
 	"jedi_language_server",
 	"golangci_lint_ls",
 }
@@ -155,6 +154,26 @@ for _, lsp in pairs(servers) do
 	})
 end
 
+lspconfig.pyright.setup({
+	on_attach = on_attach,
+	capabilities = capabilities,
+	handlers = handlers,
+	flags = {
+		-- This will be the default in neovim 0.7+
+		debounce_text_changes = 150,
+	},
+	settings = {
+		python = {
+			analysis = {
+				autoSearchPaths = true,
+				diagnosticMode = "workspace",
+				useLibraryCodeForTypes = true,
+				typeCheckingMode = "basic",
+			},
+		},
+	},
+})
+
 -- lspconfig.pylsp.setup {
 -- 	on_attach = on_attach,
 -- 	capabilities = capabilities,
@@ -171,6 +190,8 @@ end
 
 lspconfig.yamlls.setup {
 	on_attach = on_attach,
+	capabilities = capabilities,
+	handlers = handlers,
 	settings = {
 		yaml = {
 			schemas = {
