@@ -40,10 +40,10 @@ return packer.startup {
 		})
 		use({"jayp0521/mason-null-ls.nvim"})
 
-		use({
-			'j-hui/fidget.nvim',
-			config = function() require("fidget").setup {window = {blend = 0}} end,
-		})
+		-- use({
+		-- 	'j-hui/fidget.nvim',
+		-- 	config = function() require("fidget").setup {window = {blend = 0}} end,
+		-- })
 
 		use({
 			"folke/trouble.nvim",
@@ -123,6 +123,7 @@ return packer.startup {
 		use("tpope/vim-rhubarb")
 		use("tpope/vim-commentary")
 		use("tpope/vim-surround")
+		use("tpope/vim-abolish")
 
 		use({
 			"lukas-reineke/indent-blankline.nvim",

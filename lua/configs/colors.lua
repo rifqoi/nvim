@@ -5,9 +5,9 @@ require("catppuccin").setup({
 		dark = "mocha",
 	},
 	compile_path = vim.fn.stdpath("cache") .. "/catppuccin",
-	transparent_background = true,
-	term_colors = false,
-	dim_inactive = {enabled = false, shade = "dark", percentage = 0.15},
+	-- transparent_background = true,
+	term_colors = true,
+	dim_inactive = {enabled = true, shade = "dark", percentage = 0.15},
 	styles = {
 		comments = {"italic"},
 		conditionals = {"italic"},

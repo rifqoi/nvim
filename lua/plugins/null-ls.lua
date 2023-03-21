@@ -1,13 +1,3 @@
--- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --
--- ───────────────────────────────────────────────── --
---   Plugin:    null-ls.nvim
---   Github:    github.com/jose-elias-alvarez/null-ls.nvim
--- ───────────────────────────────────────────────── --
--- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --
--- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --
--- ━━━━━━━━━━━━━━━━━━━❰ configs ❱━━━━━━━━━━━━━━━━━━━ --
--- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --
--- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md
 local builtins = require("null-ls.builtins")
 local formatting = builtins.formatting
 -- local completion = builtins.completion
@@ -18,11 +8,6 @@ local code_actions = builtins.code_actions
 local sources = {}
 local load = false
 
--- ───────────────────────────────────────────────── --
--- ─────────────────❰ FORMATTING ❱────────────────── --
--- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
-
--- Lua
 if vim.fn.executable("lua-format") == 1 then
 	load = true
 	sources[#sources + 1] = formatting.lua_format.with({
@@ -38,19 +23,6 @@ if vim.fn.executable("lua-format") == 1 then
 		},
 	})
 end
-
--- Sql
--- if vim.fn.executable("sqlfluff") == 1 then
--- 	load = true
--- 	sources[#sources + 1] = formatting.sqlfluff.with({
--- 		extra_args = {"--dialect", "postgres"}, -- change to your dialect
-
--- 	})
--- end
--- Go
---
-
-local filetype = vim.bo.filetype
 
 if vim.fn.executable("gofmt") == 1 then
 	load = true
@@ -91,54 +63,13 @@ end
 -- 	sources[#sources + 1] = formatting.yapf
 -- end
 
--- ───────────────❰ end FORMATTING ❱──────────────── --
--- ───────────────────────────────────────────────── --
-
--- ───────────────────────────────────────────────── --
--- ─────────────────❰ CODEACTION ❱────────────────── --
--- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/code_actions
-
---[===[
--- Javascript
-if vim.fn.executable("clang-format") == 1 then
+if vim.fn.executable("eslint_d") == 1 then
 	load = true
-	sources[#sources+1] = code_actions.eslint.with({
-		command = "eslint",
-		filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
-		args = { "-f", "json", "--stdin", "--stdin-filename", "$FILENAME" },
-		to_stdin = true,
+	sources[#sources + 1] = diagnostics.eslint_d.with({
+		diagnostics_format = '[eslint] #{m}\n(#{c})',
 	})
+	sources[#sources + 1] = code_actions.eslint_d
 end
----]===]
-
--- ───────────────❰ end CODEACTION ❱──────────────── --
--- ───────────────────────────────────────────────── --
-
--- ───────────────────────────────────────────────── --
--- ─────────────────❰ DIAGNOSTICS ❱───────────────── --
--- -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
--- -- Django ("htmldjango")
--- if vim.fn.executable("djlint") == 1 then
--- 	load = true
--- 	sources[#sources+1] = diagnostics.djlint.with({
--- 		command = "djlint",
--- 		args = { "$FILENAME" },
--- 	})
--- end
--- ───────────────❰ end DIAGNOSTICS ❱─────────────── --
--- ───────────────────────────────────────────────── --
-
--- ───────────────────────────────────────────────── --
--- ─────────────────❰ COMPLETION ❱────────────────── --
--- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/completion
--- ───────────────❰ end COMPLETION ❱──────────────── --
--- ───────────────────────────────────────────────── --
-
--- ───────────────────────────────────────────────── --
--- ───────────────────❰ HOVER ❱───────────────────── --
--- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/hover
--- ─────────────────❰ end HOVER ❱─────────────────── --
--- ───────────────────────────────────────────────── --
 
 local lsp_formatting = function(bufnr)
 	vim.lsp.buf.format({
@@ -172,18 +103,6 @@ if vim.bo.filetype == "html" then
 	_G['null-ls'] = nil
 end
 
--- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --
--- ━━━━━━━━━━━━━━━━━❰ end configs ❱━━━━━━━━━━━━━━━━━ --
--- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --
-
--- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --
--- ━━━━━━━━━━━━━━━━━━━❰ Mappings ❱━━━━━━━━━━━━━━━━━━ --
--- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --
-
 local keymap = vim.api.nvim_set_keymap
 keymap("n", "<Space>fm", "<ESC>:lua vim.lsp.buf.format{async=true}<CR>",
        {noremap = true, silent = true})
-
--- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --
--- ━━━━━━━━━━━━━━━━━❰ end Mappings ❱━━━━━━━━━━━━━━━━ --
--- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --

@@ -33,7 +33,6 @@ mason_lspconfig.setup({
 		"terraformls",
 		"bashls",
 		"pyright",
-		"jedi_language_server",
 		"golangci_lint_ls",
 	},
 	-- auto-install configured servers (with lspconfig)

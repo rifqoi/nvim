@@ -127,7 +127,6 @@ local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp
 -- vim.cmd("autocmd BufNewFile,BufRead *.cshtml set syntax=html")
 
 local servers = {
-	"sumneko_lua",
 	"gopls",
 	"tsserver",
 	"html",
@@ -136,8 +135,8 @@ local servers = {
 	"sqls",
 	"terraform_lsp",
 	"bashls",
-	"jedi_language_server",
 	"golangci_lint_ls",
+	"bufls",
 }
 
 local lspconfig_status, lspconfig = pcall(require, "lspconfig")
@@ -154,6 +153,43 @@ for _, lsp in pairs(servers) do
 	})
 end
 
+-- lspconfig.eslint.setup({
+-- 	on_attach = on_attach,
+-- 	capabilities = capabilities,
+-- 	handlers = handlers,
+-- 	flags = {
+-- 		-- This will be the default in neovim 0.7+
+-- 		debounce_text_changes = 150,
+-- 	},
+-- 	settings = {},
+-- 	codeAction = {
+-- 		disableRuleComment = {enable = true, location = "separateLine"},
+-- 		showDocumentation = {enable = true},
+-- 	},
+-- 	codeActionOnSave = {enable = false, mode = "all"},
+-- 	format = true,
+-- 	nodePath = "",
+-- 	onIgnoredFiles = "off",
+-- 	packageManager = "npm",
+-- 	quiet = false,
+-- 	rulesCustomizations = {},
+-- 	run = "onType",
+-- 	useESLintClass = false,
+-- 	validate = "on",
+-- 	workingDirectory = {mode = "location"},
+-- })
+
+lspconfig.sumneko_lua.setup({
+	on_attach = on_attach,
+	capabilities = capabilities,
+	handlers = handlers,
+	flags = {
+		-- This will be the default in neovim 0.7+
+		debounce_text_changes = 150,
+	},
+	settings = {Lua = {diagnostics = {globals = {'vim', 'bit', 'packer_plugins'}}}},
+})
+
 lspconfig.pyright.setup({
 	on_attach = on_attach,
 	capabilities = capabilities,
@@ -165,9 +201,9 @@ lspconfig.pyright.setup({
 	settings = {
 		python = {
 			analysis = {
-				autoSearchPaths = true,
-				diagnosticMode = "workspace",
-				useLibraryCodeForTypes = true,
+				-- autoSearchPaths = true,
+				-- diagnosticMode = "workspace",
+				-- useLibraryCodeForTypes = true,
 				typeCheckingMode = "basic",
 			},
 		},

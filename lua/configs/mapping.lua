@@ -44,6 +44,12 @@ vim.keymap.set("n", "<leader>hl", ":nohl<CR>", {silent = true})
 -- Undotree
 vim.keymap.set("n", "<leader>ut", ":UndotreeToggle<CR>", {silent = true})
 
+-- Center the screen after incrsearch and c-d c-u
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
+vim.keymap.set("n", "n", "nzzzv")
+vim.keymap.set("n", "N", "Nzzzv")
+
 -- Window resize
 vim.keymap.set("n", "<leader>=", "<cmd>resize +7<CR>", {silent = true})
 vim.keymap.set("n", "<leader>-", "<cmd>resize -7<CR>", {silent = true})
