@@ -30,47 +30,40 @@ protocol.CompletionItemKind = {
 }
 
 -- Window Border
-vim.cmd [[autocmd! ColorScheme * highlight NormalFloat guibg=#1f2335]]
-vim.cmd [[autocmd! ColorScheme * highlight FloatBorder guifg=white guibg=#1f2335]]
+vim.cmd([[autocmd! ColorScheme * highlight NormalFloat guibg=#1f2335]])
+vim.cmd([[autocmd! ColorScheme * highlight FloatBorder guifg=white guibg=#1f2335]])
 
 -- Do not forget to use the on_attach function
 local function border(hl_name)
 	return {
-		{"╭", hl_name},
-		{"─", hl_name},
-		{"╮", hl_name},
-		{"│", hl_name},
-		{"╯", hl_name},
-		{"─", hl_name},
-		{"╰", hl_name},
-		{"│", hl_name},
+		{ "╭", hl_name },
+		{ "─", hl_name },
+		{ "╮", hl_name },
+		{ "│", hl_name },
+		{ "╯", hl_name },
+		{ "─", hl_name },
+		{ "╰", hl_name },
+		{ "│", hl_name },
 	}
 end
 
 -- LSP settings (for overriding per client)
 local handlers = {
-	["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover,
-	                                      {border = border "FloatBorder"}),
-	["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help,
-	                                              {border = border "FloatBorder"}),
+	["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = border("FloatBorder") }),
+	["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = border("FloatBorder") }),
 }
 
-local signs = {Error = " ", Warn = " ", Hint = " ", Info = " "}
+local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
 for type, icon in pairs(signs) do
 	local hl = "DiagnosticSign" .. type
-	vim.fn.sign_define(hl, {text = icon, texthl = hl, numhl = hl})
+	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
 
-local opts = {noremap = true, silent = true}
-vim.api.nvim_set_keymap("n", "<space>e",
-                        "<cmd>lua vim.diagnostic.open_float({border = 'rounded'})<CR>",
-                        opts)
-vim.api.nvim_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>",
-                        opts)
-vim.api.nvim_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>",
-                        opts)
-vim.api.nvim_set_keymap("n", "<space>q",
-                        "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
+local opts = { noremap = true, silent = true }
+vim.api.nvim_set_keymap("n", "<space>e", "<cmd>lua vim.diagnostic.open_float({border = 'rounded'})<CR>", opts)
+vim.api.nvim_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opts)
+vim.api.nvim_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>", opts)
+vim.api.nvim_set_keymap("n", "<space>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -80,35 +73,26 @@ local on_attach = function(client, bufnr)
 
 	-- Mappings.
 	-- See `:help vim.lsp.*` for documentation on any of the below functions
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "gD",
-	                            "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
+	vim.api.nvim_buf_set_keymap(bufnr, "n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
 	-- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "gd", ":Telescope lsp_definitions<CR>",
-	                            opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "K",
-	                            "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "gi",
-	                            "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "<C-p>",
-	                            "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>wa",
-	                            "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>",
-	                            opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>wr",
-	                            "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>",
-	                            opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>wl",
-	                            "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>",
-	                            opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>D",
-	                            "<cmd>lua vim.lsp.buf.type_definition()<CR>", opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>rn",
-	                            "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>ca",
-	                            ":lua vim.lsp.buf.code_action()<CR>", opts)
+	vim.api.nvim_buf_set_keymap(bufnr, "n", "gd", ":Telescope lsp_definitions<CR>", opts)
+	vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
+	vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
+	vim.api.nvim_buf_set_keymap(bufnr, "n", "<C-p>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
+	vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", opts)
+	vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", opts)
+	vim.api.nvim_buf_set_keymap(
+		bufnr,
+		"n",
+		"<space>wl",
+		"<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>",
+		opts
+	)
+	vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opts)
+	vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+	vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>ca", ":lua vim.lsp.buf.code_action()<CR>", opts)
 	-- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", ":Telescope lsp_references<CR>",
-	                            opts)
+	vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", ":Telescope lsp_references<CR>", opts)
 	-- nnoremap({"gr"}, ":Telescope lsp_references<CR>", "silent")
 	-- vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>f",
 	--                             "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
@@ -119,9 +103,7 @@ end
 local runtime_path = vim.split(package.path, ";")
 table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
-local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp
-				                                                                  .protocol
-				                                                                  .make_client_capabilities())
+local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
 -- vim.cmd("autocmd BufNewFile,BufRead *.cshtml set syntax=html")
@@ -140,7 +122,9 @@ local servers = {
 }
 
 local lspconfig_status, lspconfig = pcall(require, "lspconfig")
-if not lspconfig_status then return end
+if not lspconfig_status then
+	return
+end
 for _, lsp in pairs(servers) do
 	lspconfig[lsp].setup({
 		on_attach = on_attach,
@@ -187,7 +171,7 @@ lspconfig.sumneko_lua.setup({
 		-- This will be the default in neovim 0.7+
 		debounce_text_changes = 150,
 	},
-	settings = {Lua = {diagnostics = {globals = {'vim', 'bit', 'packer_plugins'}}}},
+	settings = { Lua = { diagnostics = { globals = { "vim", "bit", "packer_plugins" } } } },
 })
 
 lspconfig.pyright.setup({
@@ -224,7 +208,7 @@ lspconfig.pyright.setup({
 -- 	handlers = handlers,
 -- }
 
-lspconfig.yamlls.setup {
+lspconfig.yamlls.setup({
 	on_attach = on_attach,
 	capabilities = capabilities,
 	handlers = handlers,
@@ -232,19 +216,17 @@ lspconfig.yamlls.setup {
 		yaml = {
 			schemas = {
 				["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json"] = "/*.yaml",
-
 			},
 		},
 	},
-}
+})
 
 vim.api.nvim_create_autocmd("BufWritePre", {
-	pattern = {"*.go"},
+	pattern = { "*.go" },
 	callback = function()
 		local params = vim.lsp.util.make_range_params(nil, "utf-16")
-		params.context = {only = {"source.organizeImports"}}
-		local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params,
-		                                        3000)
+		params.context = { only = { "source.organizeImports" } }
+		local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 3000)
 		for _, res in pairs(result or {}) do
 			for _, r in pairs(res.result or {}) do
 				if r.edit then
