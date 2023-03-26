@@ -47,5 +47,5 @@ return function(opts)
 		},
 	}, opts or {})
 	require("lazy").setup(opts)
-	vim.cmd.colorscheme("tokyonight")
+	vim.cmd.colorscheme("catppuccin")
 end

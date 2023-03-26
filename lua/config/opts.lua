@@ -20,7 +20,6 @@ vim.g.mapleader = " "
 
 set.confirm = true -- Confirm to save changes before exiting modified buffer
 set.cursorline = true -- Enable highlighting of the current line
-set.expandtab = true -- Use spaces instead of tabs
 set.formatoptions = "jcroqlnt" -- tcqj
 set.grepformat = "%f:%l:%c:%m"
 set.grepprg = "rg --vimgrep"

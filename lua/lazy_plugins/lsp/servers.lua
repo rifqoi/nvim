@@ -39,9 +39,6 @@ local servers = {
 			},
 		},
 	},
-	tsserver = {
-		disable_formatting = false,
-	},
 	dockerls = {},
 }
 
@@ -65,6 +62,11 @@ function M.setup(_)
 		require("lazy_plugins.lsp.format").on_attach(client, buffer)
 		require("lazy_plugins.lsp.keymaps").on_attach(client, buffer)
 	end)
+	local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+	for type, icon in pairs(signs) do
+		local hl = "DiagnosticSign" .. type
+		vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+	end
 
 	require("mason-lspconfig").setup({ ensure_installed = vim.tbl_keys(servers) })
 	require("mason-lspconfig").setup_handlers({

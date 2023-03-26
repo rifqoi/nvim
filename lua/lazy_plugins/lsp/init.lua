@@ -35,6 +35,7 @@ return {
 			"stylua",
 			"ruff",
 			"black",
+			"prettierd",
 		},
 		config = function(plugin)
 			require("mason").setup()
@@ -61,6 +62,7 @@ return {
 					nls.builtins.formatting.stylua,
 					nls.builtins.formatting.shfmt,
 					nls.builtins.formatting.black,
+					nls.builtins.formatting.prettierd,
 					-- nls.builtins.diagnostics.flake8,
 				},
 			}
