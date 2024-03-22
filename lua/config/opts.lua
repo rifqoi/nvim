@@ -43,3 +43,4 @@ set.undofile = true
 set.undolevels = 10000
 set.updatetime = 200 -- Save swap file and trigger CursorHold
 set.wildmode = "longest:full,full" -- Command-line completion mode
+vim.g.skip_ts_context_commentstring_module = true

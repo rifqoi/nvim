@@ -1,6 +1,7 @@
 return {
 	"andweeb/presence.nvim",
 	event = { "FileType" },
+    enabled = false,
 	opts = {
 
 		-- General options

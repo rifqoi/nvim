@@ -35,6 +35,7 @@ return {
 		},
 		---@type TSConfig
 		opts = {
+			ignore_install = { "help" },
 			highlight = { enable = true },
 			indent = { enable = true, disable = { "python" } },
 			context_commentstring = { enable = true, enable_autocmd = false },
