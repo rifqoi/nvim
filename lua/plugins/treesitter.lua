@@ -1,82 +1,100 @@
-require("nvim-treesitter.configs").setup({
-	-- One of "all", "maintained" (parsers with maintainers), or a list of languages
-	-- Install languages synchronously (only applied to `ensure_installed`)
-	context_commentstring = {enable = true},
-	highlight = {
-		-- `false` will disable the whole extension
-		enable = true,
-
-		-- list of language that will be disabled
-		disable = {},
-		-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-		-- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-		-- Using this option may slow down your editor, and you may see some duplicate highlights.
-		-- Instead of true it can also be a list of languages
-		additional_vim_regex_highlighting = false,
-	},
-	refactor = {
-		highlight_definitions = {
-			enable = true,
-			-- Set to false if you have an `updatetime` of ~100.
-			clear_on_cursor_move = true,
+return {
+	{
+		"nvim-treesitter/nvim-treesitter",
+		version = false, -- last release is way too old and doesn't work on Windows
+		build = ":TSUpdate",
+		event = { "BufReadPost", "BufNewFile" },
+		dependencies = {
+			{
+				"nvim-treesitter/nvim-treesitter-textobjects",
+				init = function()
+					-- PERF: no need to load the plugin, if we only need its queries for mini.ai
+					local plugin = require("lazy.core.config").spec.plugins["nvim-treesitter"]
+					local opts = require("lazy.core.plugin").values(plugin, "opts", false)
+					local enabled = false
+					if opts.textobjects then
+						for _, mod in ipairs({ "move", "select", "swap", "lsp_interop" }) do
+							if opts.textobjects[mod] and opts.textobjects[mod].enable then
+								enabled = true
+								break
+							end
+						end
+					end
+					if not enabled then
+						require("lazy.core.loader").disable_rtp_plugin("nvim-treesitter-textobjects")
+					end
+				end,
+			},
+			{
+				"nvim-treesitter/nvim-treesitter-textobjects",
+			},
 		},
-	},
-	indent = {enable = true},
-})
-
-vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
-	pattern = {"*.html"},
-	callback = function()
-		require("nvim-treesitter.configs").setup({
-			refactor = {highlight_current_scope = {enable = true}},
-		})
-	end,
-})
-
-require'treesitter-context'.setup {
-	enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
-	max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
-	patterns = { -- Match patterns for TS nodes. These get wrapped to match at word boundaries.
-		-- For all filetypes
-		-- Note that setting an entry here replaces all other patterns for this entry.
-		-- By setting the 'default' entry below, you can control which nodes you want to
-		-- appear in the context window.
-		default = {
-			'class',
-			'function',
-			'method',
-			-- 'for', -- These won't appear in the context
-			-- 'while',
-			-- 'if',
-			-- 'switch',
-			-- 'case',
+		keys = {
+			{ "<c-space>", desc = "Increment selection" },
+			{ "<bs>", desc = "Decrement selection", mode = "x" },
 		},
-		-- Example for a specific filetype.
-		-- If a pattern is missing, *open a PR* so everyone can benefit.
-		--   rust = {
-		--       'impl_item',
-		--   },
-	},
-	exact_patterns = {
-		-- Example for a specific filetype with Lua patterns
-		-- Treat patterns.rust as a Lua pattern (i.e "^impl_item$" will
-		-- exactly match "impl_item" only)
-		-- rust = true,
-	},
+		---@type TSConfig
+		opts = {
+			ignore_install = { "help" },
+			highlight = { enable = true },
+			indent = { enable = true, disable = { "python" } },
+			ts_context_commentstring = { enable = true, enable_autocmd = false },
+			ensure_installed = {
+				"bash",
+				"c",
+				"help",
+				"html",
+				"javascript",
+				"json",
+				"lua",
+				"luadoc",
+				"luap",
+				"markdown",
+				"markdown_inline",
+				"python",
+				"query",
+				"regex",
+				"tsx",
+				"typescript",
+				"vim",
+				"go",
+				"rust",
+				"yaml",
+			},
+			incremental_selection = {
+				enable = true,
+				keymaps = {
+					init_selection = "<C-space>",
+					node_incremental = "<C-space>",
+					scope_incremental = "<nop>",
+					node_decremental = "<bs>",
+				},
+			},
+			ts_context_commentstring = { enable = true },
+			highlight = {
+				-- `false` will disable the whole extension
+				enable = true,
 
-	-- [!] The options below are exposed but shouldn't require your attention,
-	--     you can safely ignore them.
-
-	zindex = 20, -- The Z-index of the context window
-}
-
-require("nvim-treesitter.configs").setup {
-	rainbow = {
-		enable = true,
-		-- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
-		extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
-		max_file_lines = nil, -- Do not enable for files with more than n lines, int
-		-- colors = {}, -- table of hex strings
-		-- termcolors = {} -- table of colour name strings
+				-- list of language that will be disabled
+				disable = {},
+				-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+				-- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+				-- Using this option may slow down your editor, and you may see some duplicate highlights.
+				-- Instead of true it can also be a list of languages
+				additional_vim_regex_highlighting = false,
+			},
+			refactor = {
+				highlight_definitions = {
+					enable = true,
+					-- Set to false if you have an `updatetime` of ~100.
+					clear_on_cursor_move = true,
+				},
+			},
+			indent = { enable = true },
+		},
+		config = function(_, opts)
+			require("nvim-treesitter.configs").setup(opts)
+		end,
 	},
+	{ "JoosepAlviste/nvim-ts-context-commentstring", lazy = true },
 }

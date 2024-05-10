@@ -2,8 +2,24 @@ return {
 	{ "shaunsingh/oxocarbon.nvim" },
 	{ "ellisonleao/gruvbox.nvim" },
 	{
+		"luisiacc/gruvbox-baby",
+		branch = "main",
+
+		init = function()
+			-- Load the colorscheme here.
+			-- vim.g.gruvbox_baby_background_color = "dark"
+			-- vim.cmd.colorscheme("gruvbox-baby")
+
+			-- -- You can configure highlights by doing something like:
+			-- vim.cmd.hi("Comment gui=none")
+		end,
+	},
+	{
 		"catppuccin/nvim",
 		name = "catppuccin",
+		init = function()
+			vim.cmd.colorscheme("catppuccin")
+		end,
 		opts = {
 			flavour = "mocha", -- latte, frappe, macchiato, mocha
 			background = { -- :h background

@@ -14,18 +14,11 @@ vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 return function(opts)
 	opts = vim.tbl_deep_extend("force", {
 		spec = {
-			-- { "LazyVim/LazyVim", import = "lazyvim.plugins", opts = {} },
-			-- { import = "lazyvim.plugins.extras.lang.typescript" },
-			-- { import = "lazyvim.plugins.extras.linting.eslint" },
-			-- { import = "lazyvim.plugins.extras.formatting.prettier" },
-			-- { import = "lazyvim.plugins.extras.lang.json" },
-			-- {import = "lazyvim.plugins.extras.ui.mini-animate"},
-			{ import = "lazy_plugins" },
+			{ import = "plugins" },
 		},
 		defaults = { lazy = true },
-		install = { colorscheme = { "tokyonight", "habamax" } },
-		checker = { enabled = true },
-		diff = { cmd = "terminal_git" },
+		checker = { enabled = false },
+		diff = { cmd = "git" },
 		performance = {
 			cache = {
 				enabled = true,
@@ -36,7 +29,7 @@ return function(opts)
 					"gzip",
 					"matchit",
 					"matchparen",
-					"netrwPlugin",
+					-- "netrwPlugin",
 					"rplugin",
 					"tarPlugin",
 					"tohtml",
@@ -47,5 +40,4 @@ return function(opts)
 		},
 	}, opts or {})
 	require("lazy").setup(opts)
-	vim.cmd.colorscheme("catppuccin")
 end

@@ -39,5 +39,5 @@ return {
 			},
 		},
 	},
-    -- {"dhruvasagar/vim-zoom"},
+	-- {"dhruvasagar/vim-zoom"},
 }

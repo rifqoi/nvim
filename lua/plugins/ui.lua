@@ -3,19 +3,33 @@ return {
 		"b0o/incline.nvim",
 		event = "BufReadPre",
 		config = function()
-			local colors = require("tokyonight.colors").setup()
+			local helpers = require("incline.helpers")
+			local devicons = require("nvim-web-devicons")
 			require("incline").setup({
-				highlight = {
-					groups = {
-						InclineNormal = { guibg = "#FC56B1", guifg = colors.black },
-						InclineNormalNC = { guifg = "#FC56B1", guibg = colors.black },
-					},
+				window = {
+					padding = 0,
+					margin = { horizontal = 0 },
 				},
-				window = { margin = { vertical = 0, horizontal = 1 } },
+				hide = {
+					cursorline = false,
+					focused_win = true,
+					only_win = false,
+				},
 				render = function(props)
 					local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ":t")
-					local icon, color = require("nvim-web-devicons").get_icon_color(filename)
-					return { { icon, guifg = color }, { " " }, { filename } }
+					if filename == "" then
+						filename = "[No Name]"
+					end
+					local ft_icon, ft_color = devicons.get_icon_color(filename)
+					local modified = vim.bo[props.buf].modified
+					return {
+						ft_icon and { " ", ft_icon, " ", guibg = ft_color, guifg = helpers.contrast_color(ft_color) }
+							or "",
+						" ",
+						{ filename, gui = modified and "bold,italic" or "bold" },
+						" ",
+						guibg = "#44406e",
+					}
 				end,
 			})
 		end,
@@ -51,36 +65,6 @@ return {
 				end)
 			end
 		end,
-	},
-
-	-- bufferline
-	{
-		"akinsho/bufferline.nvim",
-		event = "VeryLazy",
-		keys = {
-			{ "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", desc = "Toggle pin" },
-			{ "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete non-pinned buffers" },
-		},
-		opts = {
-			options = {
-				diagnostics = "nvim_lsp",
-				always_show_bufferline = false,
-				diagnostics_indicator = function(_, _, diag)
-					local icons = require("config").icons.diagnostics
-					local ret = (diag.error and icons.Error .. diag.error .. " " or "")
-						.. (diag.warning and icons.Warn .. diag.warning or "")
-					return vim.trim(ret)
-				end,
-				offsets = {
-					{
-						filetype = "NvimTree",
-						text = "NvimTree",
-						highlight = "Directory",
-						text_align = "left",
-					},
-				},
-			},
-		},
 	},
 
 	-- statusline
@@ -138,7 +122,11 @@ return {
               cond = function() return package.loaded["noice"] and require("noice").api.status.mode.has() end,
               color = fg("Constant") ,
             },
-						{ require("lazy.status").updates, cond = require("lazy.status").has_updates, color = fg("Special") },
+						{
+							require("lazy.status").updates,
+							cond = require("lazy.status").has_updates,
+							color = fg("Special"),
+						},
 						{
 							"diff",
 							symbols = {
@@ -167,12 +155,13 @@ return {
 	{
 		"lukas-reineke/indent-blankline.nvim",
 		event = { "BufReadPost", "BufNewFile" },
+		main = "ibl",
 		opts = {
 			-- -- char = "▏",
-			char = "│",
-			filetype_exclude = { "help", "alpha", "dashboard", "neo-tree", "Trouble", "lazy" },
-			show_trailing_blankline_indent = false,
-			show_current_context = false,
+			-- char = "│",
+			-- filetype_exclude = { "help", "alpha", "dashboard", "neo-tree", "Trouble", "lazy" },
+			-- show_trailing_blankline_indent = false,
+			-- show_current_context = false,
 		},
 	},
 
