@@ -7,7 +7,7 @@ return {
 			["<esc>"] = "actions.close",
 		},
 	},
-	keys = { { "-", "<cmd>Oil --float<cr>", desc = "Fugitive git status" } },
+	keys = { { "-", "<cmd>Oil --float<cr>", desc = "Open oil window" } },
 
 	-- Optional dependencies
 	dependencies = { "nvim-tree/nvim-web-devicons" },
