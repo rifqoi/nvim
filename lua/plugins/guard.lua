@@ -95,7 +95,7 @@ return {
 
 			-- Isort for sorting import
 			ft("python"):fmt("ruff"):append("isort"):lint("ruff")
-			ft("go"):fmt("gofmt"):append("golines")
+			-- ft("go"):fmt("gofmt"):append("golines")
 
 			require("guard").setup({
 				-- Choose to format on every write to a buffer

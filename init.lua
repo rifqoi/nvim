@@ -5,4 +5,7 @@ require("config.lazy")({
 	debug = false,
 	defaults = { lazy = true },
 	performance = { cache = { enabled = true } },
+	change_detection = {
+		notify = false,
+	},
 })
