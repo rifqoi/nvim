@@ -195,6 +195,9 @@ return {
 			vim.g.navic_silence = true
 			require("util").on_attach(function(client, buffer)
 				if client.server_capabilities.documentSymbolProvider then
+					if vim.bo.filetype == "java" then
+						return
+					end
 					require("nvim-navic").attach(client, buffer)
 				end
 			end)
