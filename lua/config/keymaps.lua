@@ -19,5 +19,6 @@ vim.api.nvim_set_keymap(
 vim.keymap.set("n", "<leader>hl", ":nohl<CR>", { silent = true })
 vim.keymap.set("n", "<leader>lr", function()
 	vim.cmd("LspRestart")
-    vim.notify("LSP Restarted.")
+	vim.notify("LSP Restarted.")
 end, { silent = true })
+vim.keymap.set({ "i", "n", "v" }, "<C-C>", "<esc>", { desc = "Make Ctrl+C behave exactly like escape." })

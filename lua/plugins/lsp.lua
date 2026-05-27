@@ -1,19 +1,69 @@
 local noop = function() end
 
+local function definition_split()
+	vim.lsp.buf.definition({
+		on_list = function(options)
+			-- if there are multiple items, warn the user
+			if #options.items > 1 then
+				vim.notify("Multiple items found, opening first one", vim.log.levels.WARN)
+			end
+
+			-- Open the first item in a vertical split
+			local item = options.items[1]
+			local cmd = "vsplit +" .. item.lnum .. " " .. item.filename .. "|" .. "normal " .. item.col .. "|"
+
+			vim.cmd(cmd)
+		end,
+	})
+end
+
 local servers = {
+	sqlfmt = {},
 	gopls = {},
-	pyright = {
+	-- lexical = {
+	-- 	root_dir = function(fname)
+	-- 		local lspconfig = require("lspconfig")
+	-- 		return lspconfig.util.root_pattern("mix.exs", ".git")(fname) or vim.loop.cwd()
+	-- 	end,
+	-- 	filetypes = { "elixir", "eelixir", "heex" },
+	-- 	-- optional settings
+	-- 	settings = {},
+	-- },
+
+	basedpyright = {
 		settings = {
-			python = {
+			basedpyright = {
 				analysis = {
-					typeCheckingMode = "off",
+					typeCheckingMode = "basic",
 					autoSearchPaths = true,
 					useLibraryCodeForTypes = true,
 					diagnosticMode = "workspace",
+					diagnosticSeverityOverrides = {
+						reportUnknownParameterType = "none",
+						reportUnknownArgumentType = "none",
+						reportUnknownLambdaType = "none",
+						reportUnknownVariableType = "none",
+						reportUnknownMemberType = "none",
+						reportUnknownBaseType = "none",
+						reportUnknownCallType = "none",
+					},
 				},
 			},
 		},
 	},
+
+	-- pyright = {
+	-- 	settings = {
+	-- 		python = {
+	-- 			analysis = {
+	-- 				typeCheckingMode = "off",
+	-- 				autoSearchPaths = true,
+	-- 				useLibraryCodeForTypes = true,
+	-- 				diagnosticMode = "workspace",
+	-- 			},
+	-- 		},
+	-- 	},
+	-- },
 	rust_analyzer = {
 		settings = {
 			["rust-analyzer"] = {
@@ -31,7 +81,7 @@ local servers = {
 			return require("lspconfig.util").root_pattern(".git")(...)
 		end,
 	},
-	tsserver = {
+	ts_ls = {
 		root_dir = function(...)
 			return require("lspconfig.util").root_pattern(".git")(...)
 		end,
@@ -210,11 +260,7 @@ return {
 
 					-- Fuzzy find all the symbols in your current workspace.
 					--  Similar to document symbols, except searches over your entire project.
-					map(
-						"<leader>ws",
-						require("telescope.builtin").lsp_dynamic_workspace_symbols,
-						"[W]orkspace [S]ymbols"
-					)
+					map("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
 
 					-- Rename the variable under your cursor.
 					--  Most Language Servers support renaming across files, etc.
@@ -226,11 +272,16 @@ return {
 
 					-- Opens a popup that displays documentation about the word under your cursor
 					--  See `:help K` for why this keymap.
-					map("K", vim.lsp.buf.hover, "Hover Documentation")
+					map("K", function()
+						vim.lsp.buf.hover({
+							border = "rounded",
+						})
+					end, "Hover Documentation")
 
 					-- WARN: This is not Goto Definition, this is Goto Declaration.
 					--  For example, in C this would take you to the header.
 					map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+					map("gvd", definition_split, "[G]oto [V]split [D]efinition")
 
 					-- The following two autocommands are used to highlight references of the
 					-- word under your cursor when your cursor rests there for a little while.
@@ -247,6 +298,15 @@ return {
 						vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
 							buffer = event.buf,
 							callback = vim.lsp.buf.clear_references,
+						})
+					end
+
+					if client and client.name == "elixirls" then
+						vim.api.nvim_create_autocmd("BufWritePre", {
+							buffer = event.buf,
+							callback = function()
+								vim.lsp.buf.format({ async = false, id = event.data.client_id })
+							end,
 						})
 					end
 				end,
@@ -274,8 +334,45 @@ return {
 				"stylua", -- Used to format Lua code
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
+			-- Setup nixd manually (installed via nix, not mason)
+			require("lspconfig").nixd.setup({
+				cmd = { "nixd" },
+				capabilities = capabilities,
+				settings = {
+					flake = {
+						autoEvalOutputs = true,
+						autoEvalInputs = true,
+						root = vim.fn.getcwd(),
+					},
+					nixpkgs = {
+						-- For flake.
+						-- This expression will be interpreted as "nixpkgs" toplevel
+						-- Nixd provides package, lib completion/information from it.
+						-- Resource Usage: Entries are lazily evaluated, entire nixpkgs takes 200~300MB for just "names".
+						-- Package documentation, versions, are evaluated by-need.
+						expr = "import <nixpkgs> { }",
+					},
+					formatting = {
+						command = { "alejandra" }, -- or nixfmt or nixpkgs-fmt
+					},
+					options = {
+						nixos = {
+							expr = "(import <nixpkgs/nixos> {}).options",
+						},
+						home_manager = {
+							expr = "(import <home-manager/modules> {}).options",
+						},
+					},
+				},
+			})
+			vim.lsp.handlers["textDocument/documentHighlight"] = function(err, result, ctx, config)
+				if err and err.message and err.message:match("cannot find corresponding node") then
+					return
+				end
+			end
 
-			local ignored_lsps = { "jdtls", "ruff" }
+			-- local ignored_lsps = { "jdtls", "ruff" }
+			local ignored_lsps = { "jdtls", "nixd" }
 			require("mason-lspconfig").setup({
 				handlers = {
 					function(server_name)
@@ -299,6 +396,7 @@ return {
 			vim.diagnostic.config({
 				-- Enable update in insert for specific extensions
 				-- https://github.com/quick-lint/quick-lint-js/pull/1072
+				severity_sort = true,
 				update_in_insert = true,
 				underline = false,
 				float = {
@@ -338,7 +436,7 @@ return {
 			-- local normal = get_hl("Normal")
 
 			-- NormalFloat background
-			vim.cmd("hi NormalFloat guibg=#1e1e2e")
+			-- vim.cmd("hi NormalFloat guibg=#1e1e2e")
 			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = border })
 
 			vim.lsp.handlers["textDocument/hover"] = function(_, result, ctx, config)

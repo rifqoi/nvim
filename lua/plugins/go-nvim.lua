@@ -19,7 +19,7 @@ return {
 		{ "<leader>gat", ":execute 'write' | GoAddTag<CR>", desc = "Run Go Add Tags", silent = true, mode = { "n" } },
 		{ "<leader>grt", ":execute 'GoRmTag' <CR>", desc = "Run Go Remove Tags", silent = true, mode = { "n" } },
 		{ "<leader>gta", "<CMD>GoAddTest<CR>", desc = "Run Go Add Test for current func", silent = true, mode = { "n" } },
-		{ "<leader>gtc", "<CMD>GoTestFunc<CR>", desc = "Test Current Func", silent = true, mode = { "n" } },
+		{ "<leader>gtc", "<CMD>GoTestFunc -v -n 1<CR>", desc = "Test Current Func", silent = true, mode = { "n" } },
 		{ "<leader>gtf", "<CMD>GoTestFile<CR>", desc = "Test Current File", silent = true, mode = { "n" } },
 		{
 			"<leader>gim",
@@ -36,7 +36,7 @@ return {
 	},
 
 	config = function()
-		require("go").setup()
+		require("go").setup({})
 
 		-- Run gofmt on save
 		local format_sync_grp = vim.api.nvim_create_augroup("GoFormat", {})

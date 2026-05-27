@@ -46,8 +46,7 @@ return {
 
 			local has_words_before = function()
 				local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-				return col ~= 0
-					and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+				return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 			end
 
 			cmp.setup({
@@ -142,6 +141,13 @@ return {
 				formatting = {
 					format = function(entry, vim_item)
 						vim_item.kind = string.format("%s %s", kind_icons[vim_item.kind], vim_item.kind)
+						-- limit completion width
+						local MAX_LABEL_WIDTH = 50
+						local label = vim_item.abbr
+						local truncated_label = vim.fn.strcharpart(label, 0, MAX_LABEL_WIDTH)
+						if truncated_label ~= label then
+							vim_item.abbr = truncated_label .. "…"
+						end
 
 						vim_item.menu = ({
 							buffer = "[Buffer]",
@@ -198,5 +204,86 @@ return {
       { "<tab>", function() require("luasnip").jump(1) end, mode = "s" },
       { "<s-tab>", function() require("luasnip").jump(-1) end, mode = { "i", "s" } },
     },
+	},
+	-- GitHub Copilot (modern Lua version)
+	{
+		"zbirenbaum/copilot.lua",
+		cmd = "Copilot",
+		dependencies = {
+			"copilotlsp-nvim/copilot-lsp", -- (optional) for NES functionality
+		},
+		event = "InsertEnter",
+		keys = {
+			{
+				"<leader>nes",
+				function()
+					local config = require("copilot.config.nes")
+					config.config.enabled = true
+				end,
+				desc = "Toggle Undo Tree",
+				noremap = true,
+			},
+			{
+				"<leader>cp",
+				function()
+					local copilot = require("copilot.command")
+					-- copilot.enable()
+					copilot.toggle()
+					local disabled = require("copilot.client").is_disabled()
+					if disabled then
+						copilot.enable()
+						copilot.attach({ force = true })
+					else
+						copilot.disable()
+						copilot.detach()
+					end
+					local u = require("copilot.util")
+					local buffer_status = u.get_buffer_attach_status(vim.api.nvim_get_current_buf())
+
+					vim.notify(string.format("Toggled Copilot: %s", buffer_status))
+				end,
+				desc = "Toggle Copilot",
+				noremap = true,
+			},
+		},
+		config = function()
+			require("copilot").setup({
+				suggestion = {
+					enabled = true,
+					auto_trigger = true,
+					hide_during_completion = true,
+					debounce = 75,
+					trigger_on_accept = true,
+					keymap = {
+						accept = "<M-l>",
+						accept_word = false,
+						accept_line = false,
+						next = "<M-]>",
+						prev = "<M-[>",
+						dismiss = "<C-]>",
+					},
+				},
+				panel = { enabled = false }, -- disable side panel
+				nes = {
+					enabled = false,
+					keymap = {
+						accept_and_goto = "<M-p>",
+						accept = false,
+						dismiss = "<Esc>",
+					},
+				},
+				filetypes = {
+					sh = function()
+						if string.match(vim.fs.basename(vim.api.nvim_buf_get_name(0)), "^%.env.*") then
+							-- disable for .env files
+							return false
+						end
+						return true
+					end,
+				},
+			})
+			local copilot = require("copilot.command")
+			copilot.disable()
+		end,
 	},
 }

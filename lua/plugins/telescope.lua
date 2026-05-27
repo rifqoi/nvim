@@ -6,7 +6,11 @@ return {
 		{ "<leader>fc", ":lua require'telescope.builtin'.commands{}<cr>", desc = "List Commands" },
 		{ "<leader>fd", "<cmd>Telescope diagnostics<cr>", desc = "Find Diagnostics" },
 		{ "<leader>fe", "<cmd>Telescope file_browser<cr>", desc = "File Browser" },
-		{ "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
+		{
+			"<leader>ff",
+			"<cmd>lua require'telescope.builtin'.find_files({ find_command = {'rg', '--files', '--hidden', '-g', '!.git' }})<cr>",
+			desc = "Find Files",
+		},
 		{ "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Find Word" },
 		{ "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Find Help" },
 		{ "<leader>fi", "<cmd>Telescope import<cr>", desc = "Find Imports" },
